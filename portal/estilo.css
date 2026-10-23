@@ -176,3 +176,29 @@ code {
   nav a { margin-right: 12px; font-size: 15px; }
   th, td { padding: 6px; font-size: 14px; }
 }
+
+/* ---------- página da sprint */
+.rotulo-sprint { margin: 0; font-weight: 700; color: var(--laranja); text-transform: uppercase; font-size: 14px; letter-spacing: .04em; }
+.placar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0 8px; }
+.placar-item { background: var(--cartao); border: 1px solid var(--borda); border-radius: 8px; padding: 10px; text-align: center; }
+.placar-item strong { display: block; font-size: 26px; color: var(--azul); }
+.placar-item span { font-size: 14px; color: var(--texto-suave); }
+.grade.larga { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.cartao.tarefa { border-left: 6px solid var(--borda); }
+.cartao.tarefa.livre { border-left-color: var(--azul); }
+.cartao.tarefa.fazendo { border-left-color: #d4a72c; }
+.cartao.tarefa.revisao { border-left-color: var(--laranja); }
+.cartao.tarefa.pronto { border-left-color: var(--verde); }
+.etiqueta.livre { background: var(--azul-claro); color: var(--azul); }
+.etiqueta.fazendo { background: #fff8c5; color: #7d5a00; }
+.etiqueta.revisao { background: var(--laranja-claro); color: var(--laranja); }
+.etiqueta.pronto { background: var(--verde-claro); color: var(--verde); }
+.criterio { font-size: 14px; background: #f6f8fa; padding: 6px 8px; border-radius: 4px; }
+.botao.pequeno { padding: 6px 12px; font-size: 14px; margin-top: 4px; }
+.como-pegar { margin: 24px 0; }
+.como-pegar ol { margin: 8px 0 0; padding-left: 22px; }
+.como-pegar li { margin-bottom: 6px; }
+@media (max-width: 600px) {
+  .placar { grid-template-columns: repeat(2, 1fr); }
+  .grade.larga { grid-template-columns: 1fr; }
+}

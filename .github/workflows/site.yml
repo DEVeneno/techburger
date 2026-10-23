@@ -7,6 +7,10 @@ on:
     branches: [main]
   issues:
     types: [opened, edited, closed, reopened, assigned, unassigned, labeled, unlabeled]
+  # PR aberto ou fechado muda a tarefa para "Em revisão" / "Pronto" no portal.
+  # Roda no contexto do repositório da empresa e nunca executa o código do PR.
+  pull_request_target:
+    types: [opened, reopened, edited, closed]
   workflow_dispatch:
 
 permissions:

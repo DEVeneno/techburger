@@ -1,0 +1,8 @@
+# Requisitos não funcionais — Squad Cliente
+
+> Formato (Aula 2): uma **qualidade com número**, que dá para medir.
+> Categorias: desempenho, segurança, usabilidade, disponibilidade, confiabilidade, acessibilidade, portabilidade, manutenibilidade.
+
+| ID | Categoria | Requisito (com número) | Como medir |
+|----|-----------|------------------------|------------|
+| RNF-CLI-01 | | | |

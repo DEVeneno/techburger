@@ -2,6 +2,12 @@
 
 Bem-vindo(a) à AprendendoDev! Aqui estão as regras que todo dev segue. Elas valem para todas as sprints.
 
+## 0. Como pegar uma tarefa
+
+1. No portal, abra **[Sprint](https://aprendendodev.com.br/tarefas.html)** e escolha uma tarefa **Livre** do seu squad.
+2. Na Issue, comente **`/eu-pego`**. O robô do time atribui a tarefa a você (se ela estiver livre, for do seu squad e você não tiver outra em andamento).
+3. Desistiu ou travou de vez? Comente **`/largar`** para devolver a tarefa.
+
 ## 1. O caminho de toda contribuição
 
 ```
@@ -34,15 +40,15 @@ Os colegas vão fazendo merge no `main` da empresa. Antes de começar uma tarefa
 
 Para não haver **conflito** (duas mudanças na mesma linha do mesmo arquivo), cada squad tem os seus arquivos:
 
-| Squad | Diagramas | Código |
-|-------|-----------|--------|
-| Cardápio | `docs/diagramas/cardapio/` | `src/js/cardapio.js`, `src/css/cardapio.css` |
-| Carrinho | `docs/diagramas/carrinho/` | `src/js/carrinho.js`, `src/css/carrinho.css` |
-| Pagamento | `docs/diagramas/pagamento/` | `src/js/pagamento.js`, `src/css/pagamento.css` |
-| Cozinha | `docs/diagramas/cozinha/` | `src/js/cozinha.js`, `src/css/cozinha.css` |
-| Cliente | `docs/diagramas/cliente/` | `src/js/cliente.js`, `src/css/cliente.css` |
+| Squad | Requisitos e diagramas | Código |
+|-------|------------------------|--------|
+| Cardápio | `docs/requisitos/cardapio/`, `docs/diagramas/cardapio/` | `src/js/cardapio.js`, `src/css/cardapio.css` |
+| Carrinho | `docs/requisitos/carrinho/`, `docs/diagramas/carrinho/` | `src/js/carrinho.js`, `src/css/carrinho.css` |
+| Pagamento | `docs/requisitos/pagamento/`, `docs/diagramas/pagamento/` | `src/js/pagamento.js`, `src/css/pagamento.css` |
+| Cozinha | `docs/requisitos/cozinha/`, `docs/diagramas/cozinha/` | `src/js/cozinha.js`, `src/css/cozinha.css` |
+| Cliente | `docs/requisitos/cliente/`, `docs/diagramas/cliente/` | `src/js/cliente.js`, `src/css/cliente.css` |
 
-Arquivos compartilhados (`src/index.html`, `src/css/geral.css`, `src/dados/`, `docs/requisitos.md`): **só a sua parte**, e combinando com os outros squads na Issue. Achou um erro no módulo de outro squad? **Abra uma Issue** para ele, não corrija por conta própria.
+Arquivos compartilhados (`src/index.html`, `src/css/geral.css`, `src/dados/`, `docs/canvas/`): **só a sua parte**, e combinando com os outros squads na Issue. Achou um erro no módulo de outro squad? **Abra uma Issue** para ele, não corrija por conta própria.
 
 ## 4. Definição de Pronto
 

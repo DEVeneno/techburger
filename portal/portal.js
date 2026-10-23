@@ -2,7 +2,6 @@
 // Todo texto vindo de cards e Issues entra com textContent (nunca innerHTML).
 
 const SQUADS = ['Cardápio', 'Carrinho', 'Pagamento', 'Cozinha', 'Cliente'];
-const REPO = 'https://github.com/aprendendodev/techburger';
 
 async function lerJSON(caminho, padrao) {
   try {
@@ -21,24 +20,49 @@ function el(tag, texto, classe) {
   return e;
 }
 
-function link(texto, url) {
-  const a = el('a', texto);
+function link(texto, url, classe) {
+  const a = el('a', texto, classe);
   a.href = url;
   a.target = '_blank';
   a.rel = 'noopener';
   return a;
 }
 
+function lerUsuario() {
+  try { return localStorage.getItem('usuario') || ''; } catch (e) { return ''; }
+}
+
+function guardarUsuario(u) {
+  try { localStorage.setItem('usuario', u); } catch (e) { /* sem armazenamento: tudo bem */ }
+}
+
+// A sprint atual é a última cuja data já chegou (antes da primeira, mostra a primeira).
+async function sprintAtual() {
+  const sprints = await lerJSON('sprints.json', []);
+  const hoje = new Date().toISOString().slice(0, 10);
+  let atual = sprints[0] || null;
+  for (const s of sprints) if (s.data <= hoje) atual = s;
+  const proxima = sprints.find((s) => atual && s.numero === atual.numero + 1) || null;
+  return { atual, proxima, sprints };
+}
+
+function situacao(t) {
+  if (!t.aberta) return { nome: 'Pronto', classe: 'pronto' };
+  if (t.prs.length) return { nome: 'Em revisão', classe: 'revisao' };
+  if (t.responsaveis.length) return { nome: 'Fazendo', classe: 'fazendo' };
+  return { nome: 'Livre', classe: 'livre' };
+}
+
 // ---------- página inicial
 async function iniciarHome() {
-  const sprint = await lerJSON('sprint.json', null);
+  const { atual, proxima } = await sprintAtual();
   const caixa = document.getElementById('sprint');
-  if (!sprint || !caixa) return;
-  caixa.querySelector('.rotulo').textContent = sprint.nome + ' · ' + sprint.aula;
-  caixa.querySelector('.objetivo').textContent = sprint.objetivo;
-  caixa.querySelector('.proxima').textContent = 'Próxima: ' + sprint.proxima;
+  if (!atual || !caixa) return;
+  caixa.querySelector('.rotulo').textContent = atual.nome + ' · ' + atual.aula;
+  caixa.querySelector('.objetivo').textContent = atual.objetivo;
+  caixa.querySelector('.proxima').textContent = proxima ? 'Próxima: ' + proxima.nome + ' (' + proxima.aula + ')' : '';
   document.querySelectorAll('[data-sprint]').forEach((linha) => {
-    if (Number(linha.dataset.sprint) === sprint.numero) linha.classList.add('atual');
+    if (Number(linha.dataset.sprint) === atual.numero) linha.classList.add('atual');
   });
 }
 
@@ -67,58 +91,120 @@ async function iniciarTime() {
   }
 }
 
-// ---------- tarefas
-function cartaoTarefa(t) {
-  const c = el('div', null, 'cartao');
+// ---------- sprint e tarefas
+function cartaoTarefa(t, detalhado) {
+  const s = situacao(t);
+  const c = el('div', null, 'cartao tarefa ' + s.classe);
+  const topo = el('p', null, 'sub');
+  topo.appendChild(el('span', s.nome, 'etiqueta ' + s.classe));
+  if (t.squad) topo.appendChild(el('span', t.squad, 'etiqueta'));
+  c.appendChild(topo);
   const h = el('h3');
-  h.appendChild(link('#' + t.numero + ' ' + t.titulo, t.url));
+  h.appendChild(link('#' + t.numero + ' ' + t.titulo.replace(/^\[[^\]]+\]\s*/, ''), t.url));
   c.appendChild(h);
-  const sub = el('p', null, 'sub');
-  sub.appendChild(el('span', t.aberta ? 'aberta' : 'concluída', 'etiqueta' + (t.aberta ? '' : ' fechada')));
-  if (t.squad) sub.appendChild(el('span', t.squad, 'etiqueta'));
-  if (t.sprint !== null) sub.appendChild(el('span', 'Sprint ' + t.sprint, 'etiqueta'));
-  c.appendChild(sub);
-  c.appendChild(el('p', t.responsaveis.length ? 'Com: ' + t.responsaveis.map((r) => '@' + r).join(', ') : 'Sem responsável', 'sub'));
+  if (detalhado && t.historia) c.appendChild(el('p', t.historia));
+  if (detalhado && t.criterio) {
+    const p = el('p', null, 'criterio');
+    p.appendChild(el('strong', 'Critério de aceite: '));
+    p.appendChild(document.createTextNode(t.criterio));
+    c.appendChild(p);
+  }
+  if (t.arquivo) {
+    const p = el('p', null, 'sub');
+    p.appendChild(document.createTextNode('Arquivo: '));
+    p.appendChild(el('code', t.arquivo));
+    c.appendChild(p);
+  }
+  if (s.classe === 'livre') {
+    c.appendChild(el('p', 'Para pegar: abra a Issue e comente /eu-pego', 'sub'));
+    c.appendChild(link('Pegar esta tarefa', t.url, 'botao pequeno'));
+  } else if (s.classe === 'fazendo') {
+    c.appendChild(el('p', 'Com @' + t.responsaveis.join(', @'), 'sub'));
+  } else if (s.classe === 'revisao') {
+    const p = el('p', 'Pull request: ', 'sub');
+    t.prs.forEach((pr, k) => {
+      if (k) p.appendChild(document.createTextNode(', '));
+      p.appendChild(link('#' + pr.numero + ' de @' + pr.autor, pr.url));
+    });
+    c.appendChild(p);
+  } else if (t.responsaveis.length) {
+    c.appendChild(el('p', 'Feito por @' + t.responsaveis.join(', @'), 'sub'));
+  }
   return c;
 }
 
 async function iniciarTarefas() {
-  const dados = await lerJSON('dados/tarefas.json', { atualizado: null, tarefas: [] });
-  const tarefas = dados.tarefas;
-  if (dados.atualizado) {
-    document.getElementById('atualizado').textContent = 'Atualizado em ' + new Date(dados.atualizado).toLocaleString('pt-BR');
+  const [{ atual }, dados, time] = await Promise.all([
+    sprintAtual(),
+    lerJSON('dados/tarefas.json', { atualizado: null, tarefas: [] }),
+    lerJSON('dados/time.json', []),
+  ]);
+  const numero = atual ? atual.numero : null;
+  if (atual) {
+    document.getElementById('titulo-sprint').textContent = atual.nome;
+    document.getElementById('aula-sprint').textContent = atual.aula;
+    document.getElementById('objetivo-sprint').textContent = atual.objetivo;
   }
+  if (dados.atualizado) {
+    document.getElementById('atualizado').textContent = 'Atualizado em ' + new Date(dados.atualizado).toLocaleString('pt-BR') + ' (a página se atualiza sozinha depois de cada mudança nas Issues).';
+  }
+  const daSprint = dados.tarefas.filter((t) => t.sprint === numero);
+
+  // placar da sprint
+  const placar = document.getElementById('placar');
+  for (const nome of ['Livre', 'Fazendo', 'Em revisão', 'Pronto']) {
+    const n = daSprint.filter((t) => situacao(t).nome === nome).length;
+    const caixa = el('div', null, 'placar-item');
+    caixa.appendChild(el('strong', String(n)));
+    caixa.appendChild(el('span', nome));
+    placar.appendChild(caixa);
+  }
+
+  // minha tarefa
   const minhas = document.getElementById('minhas');
   const campo = document.getElementById('usuario');
   function buscar() {
     const u = campo.value.trim().replace(/^@/, '').toLowerCase();
     minhas.replaceChildren();
     if (!u) return;
-    try { localStorage.setItem('usuario', u); } catch (e) { /* sem armazenamento: tudo bem */ }
-    const lista = tarefas.filter((t) => t.responsaveis.some((r) => r.toLowerCase() === u));
-    if (!lista.length) {
-      minhas.appendChild(el('p', 'Nenhuma tarefa com @' + u + '. Na planning, peça um cartão ao PO.', 'vazio'));
+    guardarUsuario(u);
+    const eu = time.find((d) => d.github.toLowerCase() === u);
+    if (eu) minhas.appendChild(el('p', 'Olá, ' + eu.nome + '! Você é do Squad ' + eu.squad + '.'));
+    else minhas.appendChild(el('p', 'Ainda não achei o seu card. Termine o pull request da Sprint 0 (Issue #1) para o portal saber o seu squad.', 'vazio'));
+    const comigo = dados.tarefas.filter((t) => t.aberta && t.responsaveis.some((r) => r.toLowerCase() === u));
+    if (comigo.length) {
+      const grade = el('div', null, 'grade larga');
+      comigo.forEach((t) => grade.appendChild(cartaoTarefa(t, true)));
+      minhas.appendChild(grade);
       return;
     }
-    const grade = el('div', null, 'grade');
-    lista.sort((a, b) => b.aberta - a.aberta).forEach((t) => grade.appendChild(cartaoTarefa(t)));
-    minhas.appendChild(grade);
+    const livres = daSprint.filter((t) => situacao(t).classe === 'livre' && (!eu || t.squad === eu.squad));
+    if (livres.length) {
+      minhas.appendChild(el('p', 'Você está sem tarefa. Tarefas livres' + (eu ? ' do seu squad' : '') + ' nesta sprint:'));
+      const grade = el('div', null, 'grade larga');
+      livres.forEach((t) => grade.appendChild(cartaoTarefa(t, true)));
+      minhas.appendChild(grade);
+    } else {
+      minhas.appendChild(el('p', 'Nenhuma tarefa livre' + (eu ? ' no seu squad' : '') + ' agora. Revise o pull request de um colega ou fale com o PO.', 'vazio'));
+    }
   }
   document.getElementById('buscar').addEventListener('submit', (ev) => { ev.preventDefault(); buscar(); });
-  try { campo.value = localStorage.getItem('usuario') || ''; } catch (e) { /* idem */ }
+  campo.value = lerUsuario();
   buscar();
 
+  // todas as tarefas da sprint, por squad
   const todas = document.getElementById('todas');
-  const abertas = tarefas.filter((t) => t.aberta);
   for (const squad of SQUADS.concat([null])) {
-    const lista = abertas.filter((t) => t.squad === squad);
+    const lista = daSprint.filter((t) => t.squad === squad);
     if (!lista.length) continue;
+    const devs = time.filter((d) => d.squad === squad).map((d) => '@' + d.github);
     todas.appendChild(el('h2', squad ? 'Squad ' + squad : 'Para todos'));
+    if (squad && devs.length) todas.appendChild(el('p', devs.join('  ·  '), 'sub'));
     const grade = el('div', null, 'grade');
-    lista.forEach((t) => grade.appendChild(cartaoTarefa(t)));
+    lista.sort((a, b) => a.numero - b.numero).forEach((t) => grade.appendChild(cartaoTarefa(t, false)));
     todas.appendChild(grade);
   }
-  if (!abertas.length) todas.appendChild(el('p', 'Nenhuma tarefa aberta no momento.', 'vazio'));
+  if (!daSprint.length) todas.appendChild(el('p', 'As tarefas desta sprint aparecem aqui depois da Sprint Planning.', 'vazio'));
 }
 
 const pagina = document.body.dataset.pagina;

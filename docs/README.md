@@ -4,8 +4,8 @@ Tudo o que o app vai fazer é decidido aqui, antes de virar código (Sprints 1 a
 
 | Arquivo / pasta | O que tem | Sprint |
 |-----------------|-----------|--------|
-| [`requisitos.md`](requisitos.md) | Regras de negócio, requisitos funcionais e não funcionais | 1 |
-| `diagramas/canvas.drawio` | Business Model Canvas do TechBurger | 1 |
+| [`canvas/`](canvas/) | Business Model Canvas do TechBurger | 1 |
+| [`requisitos/<squad>/`](requisitos/) | Entrevista, regras de negócio, RF e RNF de cada módulo | 1 |
 | `diagramas/<squad>/` | Casos de uso, classes, atividades, sequência e wireframes de cada módulo | 2 a 4 |
 
 ## Como entregar um diagrama

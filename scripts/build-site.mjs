@@ -50,36 +50,59 @@ async function time() {
   return cards;
 }
 
-async function tarefas() {
-  const repo = process.env.GITHUB_REPOSITORY;
+function secao(corpo, nome) {
+  const m = new RegExp(String.raw`###\s*` + nome + String.raw`[^\n]*\n+([\s\S]*?)(?=\n###\s|$)`, 'i').exec(corpo || '');
+  if (!m) return '';
+  const t = m[1].trim();
+  return t === '_No response_' ? '' : t.slice(0, 600);
+}
+
+async function api(caminho) {
   const token = process.env.GITHUB_TOKEN;
-  if (!repo) return { atualizado: null, tarefas: [] };
-  const lista = [];
+  const itens = [];
   for (let pagina = 1; pagina <= 10; pagina++) {
-    const resp = await fetch(`https://api.github.com/repos/${repo}/issues?state=all&per_page=100&page=${pagina}`, {
+    const resp = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/${caminho}${caminho.includes('?') ? '&' : '?'}per_page=100&page=${pagina}`, {
       headers: { Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     });
     if (!resp.ok) {
-      console.warn('não consegui ler as Issues:', resp.status);
+      console.warn('falha na API do GitHub:', caminho, resp.status);
       break;
     }
-    const itens = await resp.json();
-    for (const i of itens) {
-      if (i.pull_request) continue;
-      const etiquetas = i.labels.map((l) => (typeof l === 'string' ? l : l.name));
-      const sprint = etiquetas.map((e) => /^sprint-(\d+)$/.exec(e)).find(Boolean);
-      const blocoSquad = /###\s*Squad[^\n]*\n+([^\n]+)/i.exec(i.body || '');
-      lista.push({
-        numero: i.number,
-        titulo: i.title,
-        url: i.html_url,
-        aberta: i.state === 'open',
-        responsaveis: i.assignees.map((a) => a.login),
-        squad: squadDe(etiquetas.find((e) => e.startsWith('squad-'))) || (blocoSquad ? squadDe(blocoSquad[1]) : null),
-        sprint: sprint ? Number(sprint[1]) : null,
-      });
+    const lote = await resp.json();
+    itens.push(...lote);
+    if (lote.length < 100) break;
+  }
+  return itens;
+}
+
+async function tarefas() {
+  if (!process.env.GITHUB_REPOSITORY) return { atualizado: null, tarefas: [] };
+  // PRs abertos que citam uma Issue ("Closes #12", "Parte de #1") deixam a tarefa "Em revisão"
+  const revisao = {};
+  for (const pr of await api('pulls?state=open')) {
+    for (const m of `${pr.title} ${pr.body || ''}`.matchAll(/(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|parte de)\s+#(\d+)/gi)) {
+      (revisao[m[1]] = revisao[m[1]] || []).push({ numero: pr.number, autor: pr.user.login, url: pr.html_url });
     }
-    if (itens.length < 100) break;
+  }
+  const lista = [];
+  for (const i of await api('issues?state=all')) {
+    if (i.pull_request) continue;
+    const etiquetas = i.labels.map((l) => (typeof l === 'string' ? l : l.name));
+    const sprint = etiquetas.map((e) => /^sprint-(\d+)$/.exec(e)).find(Boolean);
+    lista.push({
+      numero: i.number,
+      titulo: i.title,
+      url: i.html_url,
+      aberta: i.state === 'open',
+      responsaveis: i.assignees.map((a) => a.login),
+      squad: squadDe(etiquetas.find((e) => e.startsWith('squad-'))) || squadDe(secao(i.body, 'Squad')),
+      sprint: sprint ? Number(sprint[1]) : null,
+      etiquetas,
+      historia: secao(i.body, 'História'),
+      criterio: secao(i.body, 'Critério de aceite'),
+      arquivo: secao(i.body, 'Arquivo'),
+      prs: revisao[i.number] || [],
+    });
   }
   return { atualizado: new Date().toISOString(), tarefas: lista };
 }

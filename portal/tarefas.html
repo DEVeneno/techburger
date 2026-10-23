@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha tarefa · AprendendoDev</title>
+  <title>Sprint · AprendendoDev</title>
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body data-pagina="tarefas">
@@ -12,7 +12,7 @@
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
       <nav>
         <a href="./">Início</a>
-        <a href="tarefas.html" aria-current="page">Minha tarefa</a>
+        <a href="tarefas.html" aria-current="page">Sprint</a>
         <a href="time.html">Time</a>
         <a href="guias.html">Guias</a>
         <a href="app/">O app</a>
@@ -21,19 +21,33 @@
   </header>
 
   <main class="conteudo">
-    <h1>Minha tarefa</h1>
-    <p>Digite o seu usuário do GitHub para ver os cartões que estão com você.</p>
+    <p class="rotulo-sprint" id="aula-sprint"></p>
+    <h1 id="titulo-sprint">Sprint</h1>
+    <p id="objetivo-sprint"></p>
+    <div class="placar" id="placar"></div>
+
+    <h2>Minha tarefa</h2>
     <form class="busca" id="buscar">
-      <label for="usuario" class="vazio" hidden>Usuário do GitHub</label>
-      <input id="usuario" placeholder="@seu-usuario" autocomplete="off" autocapitalize="off">
+      <label for="usuario" hidden>Usuário do GitHub</label>
+      <input id="usuario" placeholder="@seu-usuario" autocomplete="off" autocapitalize="off" spellcheck="false">
       <button type="submit">Ver</button>
     </form>
     <div id="minhas"></div>
 
-    <h2>Todas as tarefas abertas</h2>
+    <div class="destaque como-pegar">
+      <div class="rotulo">Como pegar uma tarefa</div>
+      <ol>
+        <li>Escolha uma tarefa <strong>Livre</strong> do <strong>seu squad</strong> e clique em <em>Pegar esta tarefa</em>.</li>
+        <li>Na Issue, escreva o comentário <code>/eu-pego</code> e envie. Em alguns segundos o robô do time responde e a tarefa fica com você.</li>
+        <li>Faça a tarefa no seu fork e abra o pull request com <code>Closes #número</code>. A tarefa passa para <strong>Em revisão</strong>.</li>
+        <li>Desistiu? Comente <code>/largar</code> na Issue. Regra do quadro: <strong>1 tarefa por vez</strong>.</li>
+      </ol>
+    </div>
+
+    <h2>As tarefas da sprint</h2>
     <p class="vazio" id="atualizado"></p>
     <div id="todas"></div>
-    <p>O quadro completo, com as colunas, fica na aba <a href="https://github.com/orgs/aprendendodev/projects" target="_blank" rel="noopener">Projects</a>.</p>
+    <p>Quadro completo: aba <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Projects</a>.</p>
   </main>
 
   <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>

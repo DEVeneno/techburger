@@ -1,0 +1,20 @@
+[
+  { "numero": 0, "data": "2026-10-27", "aula": "Aula 13 · 27/10", "nome": "Sprint 0 · Kickoff",
+    "objetivo": "Cada dev cria a conta no GitHub e abre o primeiro pull request com o seu card na pasta equipe/ (Issue #1)." },
+  { "numero": 1, "data": "2026-10-30", "aula": "Aula 14 · 30/10", "nome": "Sprint 1 · Descoberta",
+    "objetivo": "Entender o negócio do TechBurger: montar o Canvas, entrevistar a cliente e registrar, por squad, a entrevista, as regras de negócio, os RF e os RNF." },
+  { "numero": 2, "data": "2026-11-05", "aula": "Aula 15 · 05/11", "nome": "Sprint 2 · Análise",
+    "objetivo": "Transformar os requisitos em histórias com critério de aceite, desenhar os casos de uso e ordenar o backlog." },
+  { "numero": 3, "data": "2026-11-06", "aula": "Aula 16 · 06/11", "nome": "Sprint 3 · Projeto",
+    "objetivo": "Desenhar as classes com cardinalidade, os dados em JSON, a persona e os wireframes de cada módulo." },
+  { "numero": 4, "data": "2026-11-12", "aula": "Aula 17 · 12/11", "nome": "Sprint 4 · Fluxos e telas",
+    "objetivo": "Desenhar atividades e sequência e construir as telas em HTML e CSS." },
+  { "numero": 5, "data": "2026-11-13", "aula": "Aula 18 · 13/11", "nome": "Sprint 5 · Funcionalidades",
+    "objetivo": "Colocar as regras de negócio em JavaScript." },
+  { "numero": 6, "data": "2026-11-17", "aula": "Aula 19 · 17/11", "nome": "Sprint 6 · Integração",
+    "objetivo": "Fazer os módulos conversarem: pagamento simulado, cozinha, status e dados." },
+  { "numero": 7, "data": "2026-11-19", "aula": "Aula 20 · 19/11", "nome": "Sprint 7 · Qualidade",
+    "objetivo": "Testar os critérios de aceite, cuidar da UX e da acessibilidade e corrigir os bugs." },
+  { "numero": 8, "data": "2026-11-27", "aula": "Aula 21 · 27/11", "nome": "Sprint 8 · Release 1.0",
+    "objetivo": "Colocar o app no ar, demonstrar cada módulo e fazer a retrospectiva final." }
+]

@@ -1,0 +1,63 @@
+name: Pegar tarefa
+
+# Comandos nos comentários das Issues:
+#   /eu-pego  → atribui a tarefa a quem comentou (se estiver livre, for do squad e a pessoa não tiver outra aberta na sprint)
+#   /largar   → devolve a tarefa
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  comando:
+    if: ${{ !github.event.issue.pull_request && (startsWith(github.event.comment.body, '/eu-pego') || startsWith(github.event.comment.body, '/largar')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue = context.payload.issue;
+            const quem = context.payload.comment.user.login;
+            const corpo = context.payload.comment.body.trim().toLowerCase();
+            const responder = (texto) => github.rest.issues.createComment({ owner, repo, issue_number: issue.number, body: texto });
+            const semAcento = (s) => (s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+            const etiquetas = issue.labels.map((l) => l.name);
+            const donos = issue.assignees.map((a) => a.login);
+
+            if (corpo.startsWith('/largar')) {
+              if (!donos.includes(quem)) return responder(`@${quem}, esta tarefa não está com você, então não há o que largar.`);
+              await github.rest.issues.removeAssignees({ owner, repo, issue_number: issue.number, assignees: [quem] });
+              try { await github.rest.issues.removeLabel({ owner, repo, issue_number: issue.number, name: 'fazendo' }); } catch (e) {}
+              return responder(`Tarefa devolvida por @${quem}: está **livre** de novo para o squad.`);
+            }
+
+            if (issue.state === 'closed') return responder(`@${quem}, esta tarefa já foi concluída. Escolha outra **Livre** na página da Sprint: https://aprendendodev.com.br/tarefas.html`);
+            if (donos.length) return responder(`@${quem}, esta tarefa já está com @${donos.join(', @')}. Escolha outra **Livre** na página da Sprint: https://aprendendodev.com.br/tarefas.html`);
+
+            // squad do dev (pelo card em equipe/) x squad da tarefa (pela etiqueta)
+            const squadTarefa = (etiquetas.find((e) => e.startsWith('squad-')) || '').replace('squad-', '');
+            let squadDev = null;
+            try {
+              const card = await github.rest.repos.getContent({ owner, repo, path: `equipe/${quem}.md` });
+              const texto = Buffer.from(card.data.content, 'base64').toString('utf8');
+              const linha = texto.split('\n').find((l) => semAcento(l).trim().startsWith('- squad'));
+              if (linha) squadDev = semAcento(linha.split(':').slice(1).join(':')).trim();
+            } catch (e) {}
+            if (squadTarefa && squadDev && !squadDev.includes(semAcento(squadTarefa))) {
+              return responder(`@${quem}, esta tarefa é do **Squad ${squadTarefa}** e o seu card diz **${squadDev}**. Pegue uma tarefa do seu squad (ou combine a troca com o professor).`);
+            }
+
+            // regra do quadro: 1 tarefa aberta por vez na mesma sprint
+            const sprint = etiquetas.find((e) => e.startsWith('sprint-'));
+            const abertas = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: 'open', assignee: quem, per_page: 100 });
+            const outra = abertas.find((i) => !i.pull_request && i.number !== issue.number && (!sprint || i.labels.some((l) => l.name === sprint)));
+            if (outra) return responder(`@${quem}, você já está com a #${outra.number}. Regra do quadro: **1 tarefa por vez**. Termine (ou comente \`/largar\` lá) antes de pegar outra.`);
+
+            await github.rest.issues.addAssignees({ owner, repo, issue_number: issue.number, assignees: [quem] });
+            await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: ['fazendo'] });
+            const aviso = squadDev ? '' : '\n\n> Ainda não achei o seu card em `equipe/`. Termine o pull request da Sprint 0 (Issue #1).';
+            return responder(`✅ Tarefa com @${quem}.\n\n**Próximos passos:**\n1. Leia a história e o critério de aceite acima.\n2. Atualize o seu fork (**Sync fork › Update branch**).\n3. Edite **só o arquivo da tarefa** no seu fork, numa branch nova.\n4. Abra o pull request com \`Closes #${issue.number}\`.\n\nGuia: https://aprendendodev.com.br/guias.html#tarefa${aviso}`);
