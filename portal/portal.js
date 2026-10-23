@@ -169,8 +169,8 @@ async function iniciarTarefas() {
   function buscar() {
     const u = campo.value.trim().replace(/^@/, '').toLowerCase();
     minhas.replaceChildren();
-    if (!u) return;
     guardarUsuario(u);
+    if (!u) return;
     const eu = time.find((d) => d.github.toLowerCase() === u);
     if (eu) minhas.appendChild(el('p', 'Olá, ' + eu.nome + '! Você é do Squad ' + eu.squad + '.'));
     else minhas.appendChild(el('p', 'Ainda não achei o seu card. Termine o pull request da Sprint 0 (Issue #1) para o portal saber o seu squad.', 'vazio'));
@@ -185,7 +185,7 @@ async function iniciarTarefas() {
     if (livres.length) {
       minhas.appendChild(el('p', 'Você está sem tarefa. Tarefas livres' + (eu ? ' do seu squad' : '') + ' nesta sprint:'));
       const grade = el('div', null, 'grade larga');
-      livres.forEach((t) => grade.appendChild(cartaoTarefa(t, true)));
+      livres.sort((x, y) => x.numero - y.numero).forEach((t) => grade.appendChild(cartaoTarefa(t, true)));
       minhas.appendChild(grade);
     } else {
       minhas.appendChild(el('p', 'Nenhuma tarefa livre' + (eu ? ' no seu squad' : '') + ' agora. Revise o pull request de um colega ou fale com o PO.', 'vazio'));
