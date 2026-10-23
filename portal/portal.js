@@ -42,6 +42,9 @@ async function sprintAtual() {
   const hoje = new Date().toISOString().slice(0, 10);
   let atual = sprints[0] || null;
   for (const s of sprints) if (s.data <= hoje) atual = s;
+  // prévia: tarefas.html?sprint=2 mostra outra sprint (útil para o PO conferir antes da aula)
+  const pedida = new URLSearchParams(location.search).get('sprint');
+  if (pedida !== null) atual = sprints.find((s) => String(s.numero) === pedida) || atual;
   const proxima = sprints.find((s) => atual && s.numero === atual.numero + 1) || null;
   return { atual, proxima, sprints };
 }
