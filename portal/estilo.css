@@ -202,3 +202,4 @@ code {
   .placar { grid-template-columns: repeat(2, 1fr); }
   .grade.larga { grid-template-columns: 1fr; }
 }
+.cartao code { word-break: break-all; }

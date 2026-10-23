@@ -51,7 +51,7 @@ async function time() {
 }
 
 function secao(corpo, nome) {
-  const m = new RegExp(String.raw`###\s*` + nome + String.raw`[^\n]*\n+([\s\S]*?)(?=\n###\s|$)`, 'i').exec(corpo || '');
+  const m = new RegExp(String.raw`###\s*` + nome + String.raw`[^\n]*\n+([\s\S]*?)(?=\n###\s|\n---|$)`, 'i').exec(corpo || '');
   if (!m) return '';
   const t = m[1].trim();
   return t === '_No response_' ? '' : t.slice(0, 600);
