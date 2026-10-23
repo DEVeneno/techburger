@@ -1,0 +1,25 @@
+name: Bug
+description: Algo que não funciona como deveria
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: squad
+    attributes:
+      label: Squad do módulo com problema
+      options: [Cardápio, Carrinho, Pagamento, Cozinha, Cliente, Não sei]
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Como reproduzir
+      placeholder: "1. Abri o carrinho com 2 itens\n2. Cliquei em Finalizar\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que deveria acontecer x o que aconteceu
+    validations:
+      required: true

@@ -1,0 +1,41 @@
+/* Estilos gerais do app (arquivo compartilhado: combinar na Issue antes de mudar) */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #1a1a1a;
+  background: #fffaf3;
+}
+
+.topo {
+  padding: 24px 16px;
+  background: #c0392b;
+  color: #fff;
+  text-align: center;
+}
+
+.topo h1 {
+  margin: 0;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.aviso {
+  padding: 16px;
+  border-left: 6px solid #f39c12;
+  background: #fff;
+}
+
+.rodape {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}

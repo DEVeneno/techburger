@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha tarefa · AprendendoDev</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body data-pagina="tarefas">
+  <header class="topo">
+    <div class="conteudo">
+      <a class="marca" href="./">Aprendendo<span>Dev</span></a>
+      <nav>
+        <a href="./">Início</a>
+        <a href="tarefas.html" aria-current="page">Minha tarefa</a>
+        <a href="time.html">Time</a>
+        <a href="guias.html">Guias</a>
+        <a href="app/">O app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <h1>Minha tarefa</h1>
+    <p>Digite o seu usuário do GitHub para ver os cartões que estão com você.</p>
+    <form class="busca" id="buscar">
+      <label for="usuario" class="vazio" hidden>Usuário do GitHub</label>
+      <input id="usuario" placeholder="@seu-usuario" autocomplete="off" autocapitalize="off">
+      <button type="submit">Ver</button>
+    </form>
+    <div id="minhas"></div>
+
+    <h2>Todas as tarefas abertas</h2>
+    <p class="vazio" id="atualizado"></p>
+    <div id="todas"></div>
+    <p>O quadro completo, com as colunas, fica na aba <a href="https://github.com/orgs/aprendendodev/projects" target="_blank" rel="noopener">Projects</a>.</p>
+  </main>
+
+  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <script src="portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+name: História de usuário
+description: Uma tarefa do backlog, com critério de aceite
+title: "[Squad] Como ..., quero ..., para ..."
+labels: ["historia"]
+body:
+  - type: dropdown
+    id: squad
+    attributes:
+      label: Squad
+      options: [Cardápio, Carrinho, Pagamento, Cozinha, Cliente]
+    validations:
+      required: true
+  - type: textarea
+    id: historia
+    attributes:
+      label: História
+      description: "Como [quem], quero [o quê], para [por quê]"
+      placeholder: "Como cliente, quero ser avisado do pedido mínimo, para não perder tempo no pagamento."
+    validations:
+      required: true
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Critério de aceite
+      description: "Dado [o contexto], Quando [a ação], Então [a reação do sistema]"
+      placeholder: "Dado um carrinho com R$ 12,00, Quando tento finalizar, Então o app impede e mostra \"Faltam R$ 3,00 para o pedido mínimo\"."
+    validations:
+      required: true
+  - type: input
+    id: regra
+    attributes:
+      label: Regra de negócio ou requisito de origem
+      placeholder: "Regra 1 · RF03"
+  - type: input
+    id: diagrama
+    attributes:
+      label: Diagrama de referência
+      placeholder: "docs/diagramas/carrinho/atividades.drawio"

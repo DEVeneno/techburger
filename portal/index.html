@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AprendendoDev</title>
+  <meta name="description" content="A empresa de software da turma 103513: construindo o app TechBurger do zero, em 8 sprints.">
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body data-pagina="home">
+  <header class="topo">
+    <div class="conteudo">
+      <a class="marca" href="./">Aprendendo<span>Dev</span></a>
+      <nav>
+        <a href="./" aria-current="page">Início</a>
+        <a href="tarefas.html">Minha tarefa</a>
+        <a href="time.html">Time</a>
+        <a href="guias.html">Guias</a>
+        <a href="app/">O app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <h1>Bem-vindo(a) à AprendendoDev</h1>
+    <p>Somos a empresa de software da turma 103513. O nosso cliente é o <strong>TechBurger</strong>, e vamos construir do zero o app de pedidos dele: primeiro modelar, depois programar, depois entregar.</p>
+
+    <div class="destaque" id="sprint">
+      <div class="rotulo">Sprint atual</div>
+      <p class="objetivo"><strong>Carregando...</strong></p>
+      <p class="proxima"></p>
+    </div>
+
+    <div class="botoes">
+      <a class="botao" href="tarefas.html">Ver a minha tarefa</a>
+      <a class="botao secundario" href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">Repositório</a>
+      <a class="botao secundario" href="https://github.com/orgs/aprendendodev/projects" target="_blank" rel="noopener">Quadro</a>
+      <a class="botao secundario" href="guias.html#primeiro-pr">Primeiro pull request</a>
+    </div>
+
+    <h2>Como trabalhamos</h2>
+    <div class="grade">
+      <div class="cartao"><h3>Sprint Planning</h3><p>Início da aula: o PO mostra o objetivo e cada dev pega UMA tarefa.</p></div>
+      <div class="cartao"><h3>Daily</h3><p>10 minutos por squad: o que fiz, o que vou fazer, o que me bloqueia.</p></div>
+      <div class="cartao"><h3>Sprint Review</h3><p>Fim da aula: cada squad mostra funcionando o que ficou pronto.</p></div>
+      <div class="cartao"><h3>Retrospectiva</h3><p>Uma melhoria no jeito de trabalhar para a próxima sprint.</p></div>
+    </div>
+
+    <h2>O roadmap</h2>
+    <table>
+      <thead><tr><th>Aula</th><th>Sprint</th><th>Entregas</th></tr></thead>
+      <tbody>
+        <tr data-sprint="0"><td>13 · 27/10</td><td>Kickoff</td><td>Conta no GitHub e o card de cada dev</td></tr>
+        <tr data-sprint="1" class="fase-m"><td>14 · 30/10</td><td>1 · Descoberta</td><td>Canvas, entrevista, regras de negócio, RF e RNF</td></tr>
+        <tr data-sprint="2" class="fase-m"><td>15 · 05/11</td><td>2 · Análise</td><td>Histórias com critério de aceite, casos de uso, backlog</td></tr>
+        <tr data-sprint="3" class="fase-m"><td>16 · 06/11</td><td>3 · Projeto</td><td>Classes, dados em JSON, persona e wireframes</td></tr>
+        <tr data-sprint="4" class="fase-c"><td>17 · 12/11</td><td>4 · Fluxos e telas</td><td>Atividades, sequência, telas em HTML e CSS</td></tr>
+        <tr data-sprint="5" class="fase-c"><td>18 · 13/11</td><td>5 · Funcionalidades</td><td>As regras de negócio em JavaScript</td></tr>
+        <tr data-sprint="6" class="fase-c"><td>19 · 17/11</td><td>6 · Integração</td><td>Pagamento simulado, cozinha, status e dados</td></tr>
+        <tr data-sprint="7" class="fase-c"><td>20 · 19/11</td><td>7 · Qualidade</td><td>Testes, UX, acessibilidade, correções</td></tr>
+        <tr data-sprint="8" class="fase-e"><td>21 · 27/11</td><td>8 · Release 1.0</td><td>App no ar, demonstração e retrospectiva final</td></tr>
+      </tbody>
+    </table>
+
+    <h2>As regras do time</h2>
+    <ul>
+      <li>Todo trabalho é uma Issue no quadro. Uma tarefa = uma branch = um pull request.</li>
+      <li>Cada um mexe no que é seu; para mexer no do outro, combine antes na Issue.</li>
+      <li>A crítica é ao código, nunca à pessoa.</li>
+      <li>Usou internet ou IA? Saiba explicar cada linha que entregou.</li>
+      <li>Nenhum dado pessoal no repositório: ele é público.</li>
+    </ul>
+    <p>Todas as regras: <a href="https://github.com/aprendendodev/techburger/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a>.</p>
+  </main>
+
+  <footer class="conteudo rodape">AprendendoDev · Turma 103513 · Técnico em Desenvolvimento de Sistemas · SENAI</footer>
+  <script src="portal.js"></script>
+</body>
+</html>
