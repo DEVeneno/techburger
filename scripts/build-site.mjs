@@ -111,6 +111,12 @@ await rm(SAIDA, { recursive: true, force: true });
 await cp(path.join(RAIZ, 'portal'), SAIDA, { recursive: true });
 await cp(path.join(RAIZ, 'src'), path.join(SAIDA, 'app'), { recursive: true });
 await mkdir(path.join(SAIDA, 'dados'), { recursive: true });
+// versão nos links de CSS/JS: o navegador não fica preso numa cópia antiga depois de cada publicação
+const versao = Date.now().toString(36);
+for (const f of (await readdir(SAIDA)).filter((x) => x.endsWith('.html'))) {
+  const html = await readFile(path.join(SAIDA, f), 'utf8');
+  await writeFile(path.join(SAIDA, f), html.replace(/(href="estilo\.css|src="portal\.js)"/g, `$1?v=${versao}"`));
+}
 const cards = await time();
 const t = await tarefas();
 await writeFile(path.join(SAIDA, 'dados', 'time.json'), JSON.stringify(cards, null, 2));
