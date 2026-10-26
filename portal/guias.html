@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guias · AprendendoDev</title>
+  <meta name="description" content="Guias passo a passo do projeto.">
+  <meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body data-pagina="guias">
   <header class="topo">
     <div class="conteudo">
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
-      <nav>
+      <nav aria-label="Principal">
         <a href="./">Início</a>
         <a href="comecar.html">Começar</a>
         <a href="tarefas.html">Sprint</a>
@@ -22,76 +28,88 @@
   </header>
 
   <main class="conteudo">
-    <h1>Guias passo a passo</h1>
-    <ul>
-      <li><a href="#primeiro-pr">O primeiro pull request (o seu card)</a></li>
-      <li><a href="#sync">Atualizar o seu fork antes de cada tarefa</a></li>
-      <li><a href="#tarefa">Entregar uma tarefa da sprint</a></li>
-      <li><a href="#drawio">Entregar um diagrama do draw.io</a></li>
-      <li><a href="#editor">Editar código no navegador (github.dev)</a></li>
-      <li><a href="#casa">Em casa: Git e VS Code instalados (opcional)</a></li>
-    </ul>
+    <span class="sobretitulo">Passo a passo</span>
+    <h1>Guias</h1>
+    <p class="lead">Tudo o que você faz no projeto, do primeiro pull request ao diagrama no draw.io. Só com o navegador.</p>
 
-    <h2 id="primeiro-pr">O primeiro pull request (o seu card)</h2>
-    <p>Jeito rápido: a página <a href="comecar.html">Começar</a> monta o card e abre o GitHub com o arquivo já preenchido. Jeito à mão:</p>
-    <ol class="passos">
-      <li>Entre no GitHub e abra <a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">github.com/aprendendodev/techburger</a>.</li>
-      <li>Clique na pasta <code>equipe</code>, abra o <code>_modelo.md</code> e copie o texto. Volte para a pasta e clique em <strong>Add file › Create new file</strong>.</li>
-      <li>O GitHub pede um fork: clique em <strong>Fork this repository</strong>.</li>
-      <li>No nome do arquivo, digite <code>seu-usuario.md</code> (o seu usuário do GitHub). Cole o modelo e preencha. Só o primeiro nome.</li>
-      <li>Clique em <strong>Commit changes...</strong> e depois em <strong>Propose changes</strong>.</li>
-      <li>Confira em <strong>Comparing changes</strong>: 1 arquivo novo, só o seu. Clique em <strong>Create pull request</strong>.</li>
-      <li>Preencha o modelo do PR. Na Issue, escreva <code>Parte de #1</code> (se esquecer, o robô coloca). Clique em <strong>Create pull request</strong>.</li>
-      <li>O robô do time confere o card e comenta no PR. Se o professor pedir mudança, edite o arquivo no <strong>seu fork</strong>, na mesma branch (<code>patch-1</code>): o PR se atualiza sozinho.</li>
-    </ol>
+    <div class="com-indice">
+      <aside class="indice">
+        <p>Nesta página</p>
+        <ul>
+          <li><a href="#primeiro-pr">O primeiro pull request (o seu card)</a></li>
+          <li><a href="#sync">Atualizar o seu fork antes de cada tarefa</a></li>
+          <li><a href="#tarefa">Entregar uma tarefa da sprint</a></li>
+          <li><a href="#drawio">Entregar um diagrama do draw.io</a></li>
+          <li><a href="#editor">Editar código no navegador (github.dev)</a></li>
+          <li><a href="#casa">Em casa: Git e VS Code instalados (opcional)</a></li>
+        </ul>
+      </aside>
+      <article class="artigo">
+        <h2 id="primeiro-pr">O primeiro pull request (o seu card)</h2>
+        <p>Jeito rápido: a página <a href="comecar.html">Começar</a> monta o card e abre o GitHub com o arquivo já preenchido. Jeito à mão:</p>
+        <ol class="passos">
+          <li>Entre no GitHub e abra <a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">github.com/aprendendodev/techburger</a>.</li>
+          <li>Clique na pasta <code>equipe</code>, abra o <code>_modelo.md</code> e copie o texto. Volte para a pasta e clique em <strong>Add file › Create new file</strong>.</li>
+          <li>O GitHub pede um fork: clique em <strong>Fork this repository</strong>.</li>
+          <li>No nome do arquivo, digite <code>seu-usuario.md</code> (o seu usuário do GitHub). Cole o modelo e preencha. Só o primeiro nome.</li>
+          <li>Clique em <strong>Commit changes...</strong> e depois em <strong>Propose changes</strong>.</li>
+          <li>Confira em <strong>Comparing changes</strong>: 1 arquivo novo, só o seu. Clique em <strong>Create pull request</strong>.</li>
+          <li>Preencha o modelo do PR. Na Issue, escreva <code>Parte de #1</code> (se esquecer, o robô coloca). Clique em <strong>Create pull request</strong>.</li>
+          <li>O robô do time confere o card e comenta no PR. Se o professor pedir mudança, edite o arquivo no <strong>seu fork</strong>, na mesma branch (<code>patch-1</code>): o PR se atualiza sozinho.</li>
+        </ol>
 
-    <h2 id="sync">Atualizar o seu fork antes de cada tarefa</h2>
-    <p>Os colegas vão fazendo merge no repositório da empresa, e o seu fork fica para trás. Antes de começar uma tarefa nova:</p>
-    <ol class="passos">
-      <li>Abra o <strong>seu</strong> fork: <code>github.com/seu-usuario/techburger</code>.</li>
-      <li>Clique em <strong>Sync fork › Update branch</strong>.</li>
-    </ol>
+        <h2 id="sync">Atualizar o seu fork antes de cada tarefa</h2>
+        <p>Os colegas vão fazendo merge no repositório da empresa, e o seu fork fica para trás. Antes de começar uma tarefa nova:</p>
+        <ol class="passos">
+          <li>Abra o <strong>seu</strong> fork: <code>github.com/seu-usuario/techburger</code>.</li>
+          <li>Clique em <strong>Sync fork › Update branch</strong>.</li>
+        </ol>
 
-    <h2 id="tarefa">Entregar uma tarefa da sprint</h2>
-    <p>A página <a href="tarefas.html#minha">Sprint › Minha tarefa</a> mostra o seu próximo passo com os botões certos. O caminho completo:</p>
-    <ol class="passos">
-      <li>Na página <a href="tarefas.html">Sprint</a>, escolha uma tarefa <strong>Livre</strong> do seu squad e clique em <strong>Pegar esta tarefa</strong>. A Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
-      <li>Na Issue, cole (<code>Ctrl+V</code>) na caixa de comentário e clique em <strong>Comment</strong>. O robô responde e a tarefa fica com você (1 tarefa por vez; para devolver, comente <code>/largar</code>).</li>
-      <li>Leia a história e o critério de aceite. Na resposta do robô (ou em <em>Minha tarefa</em>), clique em <strong>Editar</strong>: o arquivo da tarefa abre no GitHub. Se pedir, clique em <strong>Fork this repository</strong>.</li>
-      <li>Escreva o que o critério pede. Clique em <strong>Commit changes...</strong>, escreva o que fez (<code>Preenche a entrevista do cardápio</code>) e clique em <strong>Propose changes</strong>.</li>
-      <li>Clique em <strong>Create pull request</strong>, escreva <code>Closes #número-da-issue</code> no campo Issue e o diagrama de referência. O robô confere o PR e a tarefa vai para <strong>Em revisão</strong>.</li>
-      <li>Peça ao Tech Lead do squad que revise. Ajuste o que ele ou o professor pedirem, no seu fork, na mesma branch.</li>
-      <li>Depois do merge, a Issue fecha sozinha e a tarefa vai para <strong>Pronto</strong>.</li>
-    </ol>
-    <p class="sub">O seu fork ficou velho (os colegas já fizeram merge de outras coisas)? Faça o <a href="#sync">Sync fork</a> antes de editar.</p>
+        <h2 id="tarefa">Entregar uma tarefa da sprint</h2>
+        <p>A página <a href="tarefas.html#minha">Sprint › Minha tarefa</a> mostra o seu próximo passo com os botões certos. O caminho completo:</p>
+        <ol class="passos">
+          <li>Na página <a href="tarefas.html">Sprint</a>, escolha uma tarefa <strong>Livre</strong> do seu squad e clique em <strong>Pegar esta tarefa</strong>. A Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
+          <li>Na Issue, cole (<code>Ctrl+V</code>) na caixa de comentário e clique em <strong>Comment</strong>. O robô responde e a tarefa fica com você (1 tarefa por vez; para devolver, comente <code>/largar</code>).</li>
+          <li>Leia a história e o critério de aceite. Na resposta do robô (ou em <em>Minha tarefa</em>), clique em <strong>Editar</strong>: o arquivo da tarefa abre no GitHub. Se pedir, clique em <strong>Fork this repository</strong>.</li>
+          <li>Escreva o que o critério pede. Clique em <strong>Commit changes...</strong>, escreva o que fez (<code>Preenche a entrevista do cardápio</code>) e clique em <strong>Propose changes</strong>.</li>
+          <li>Clique em <strong>Create pull request</strong>, escreva <code>Closes #número-da-issue</code> no campo Issue e o diagrama de referência. O robô confere o PR e a tarefa vai para <strong>Em revisão</strong>.</li>
+          <li>Peça ao Tech Lead do squad que revise. Ajuste o que ele ou o professor pedirem, no seu fork, na mesma branch.</li>
+          <li>Depois do merge, a Issue fecha sozinha e a tarefa vai para <strong>Pronto</strong>.</li>
+        </ol>
+        <p class="sub">O seu fork ficou velho (os colegas já fizeram merge de outras coisas)? Faça o <a href="#sync">Sync fork</a> antes de editar.</p>
 
-    <h2 id="drawio">Entregar um diagrama do draw.io</h2>
-    <ol class="passos">
-      <li>Desenhe em <a href="https://app.diagrams.net" target="_blank" rel="noopener">app.diagrams.net</a> e salve como <code>.drawio</code> (nome sem espaço e sem acento: <code>casos-de-uso.drawio</code>).</li>
-      <li>No seu fork, abra <code>docs/diagramas/seu-squad/</code> e clique em <strong>Add file › Upload files</strong>.</li>
-      <li>Arraste o arquivo, escreva a mensagem (<code>Cria casos de uso do carrinho</code>), escolha <strong>Create a new branch</strong> e clique em <strong>Propose changes</strong>.</li>
-      <li>Abra o pull request com <code>Closes #número-da-issue</code>.</li>
-    </ol>
+        <h2 id="drawio">Entregar um diagrama do draw.io</h2>
+        <ol class="passos">
+          <li>Em <a href="tarefas.html#minha">Minha tarefa</a>, clique em <strong>Abrir no draw.io</strong>: o ponto de partida do seu squad abre no navegador. (Também dá para usar o draw.io instalado no laboratório.)</li>
+          <li>Desenhe. Para salvar: <strong>Arquivo › Salvar como › Dispositivo</strong>, com o nome exato do arquivo da tarefa (ex.: <code>casos-de-uso.drawio</code>, sem espaço e sem acento).</li>
+          <li>Clique em <strong>Enviar</strong> (se o GitHub pedir, <strong>Fork this repository</strong>), arraste o arquivo, escreva a mensagem (<code>Cria casos de uso do carrinho</code>) e clique em <strong>Propose changes</strong>. O arquivo novo substitui o ponto de partida.</li>
+          <li>Clique em <strong>Create pull request</strong> com <code>Closes #número-da-issue</code> (se esquecer, o robô coloca).</li>
+        </ol>
 
-    <h2 id="editor">Editar código no navegador (github.dev)</h2>
-    <ol class="passos">
-      <li>Abra o seu fork e aperte a tecla <code>.</code> (ponto): abre um editor de código igual ao VS Code, dentro do navegador.</li>
-      <li>Edite os arquivos do seu squad. Na barra da esquerda, o ícone de <strong>Source Control</strong> mostra o que mudou.</li>
-      <li>Escreva a mensagem do commit e clique em <strong>Commit &amp; Push</strong>. Para uma branch nova, clique no nome da branch (canto inferior esquerdo) e crie a branch antes.</li>
-      <li>Volte ao GitHub e abra o pull request.</li>
-    </ol>
-    <p>O github.dev não roda o app. Para ver o resultado, baixe o fork (<strong>Code › Download ZIP</strong>) e abra <code>src/index.html</code> no navegador, ou aguarde o merge e veja em <a href="app/">aprendendodev.com.br/app</a>.</p>
+        <h2 id="editor">Editar código no navegador (github.dev)</h2>
+        <ol class="passos">
+          <li>Abra o seu fork e aperte a tecla <code>.</code> (ponto): abre um editor de código igual ao VS Code, dentro do navegador.</li>
+          <li>Edite os arquivos do seu squad. Na barra da esquerda, o ícone de <strong>Source Control</strong> mostra o que mudou.</li>
+          <li>Escreva a mensagem do commit e clique em <strong>Commit &amp; Push</strong>. Para uma branch nova, clique no nome da branch (canto inferior esquerdo) e crie a branch antes.</li>
+          <li>Volte ao GitHub e abra o pull request.</li>
+        </ol>
+        <p>O github.dev não roda o app. Para ver o resultado, baixe o fork (<strong>Code › Download ZIP</strong>) e abra <code>src/index.html</code> no navegador, ou aguarde o merge e veja em <a href="app/">aprendendodev.com.br/app</a>.</p>
 
-    <h2 id="casa">Em casa: Git e VS Code instalados (opcional)</h2>
-    <ol class="passos">
-      <li>Instale o <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> e o <a href="https://code.visualstudio.com" target="_blank" rel="noopener">VS Code</a>.</li>
-      <li>No terminal: <code>git clone https://github.com/seu-usuario/techburger.git</code></li>
-      <li>Para cada tarefa: <code>git switch -c nome-da-branch</code>, edite, <code>git add .</code>, <code>git commit -m "Verbo + o quê"</code>, <code>git push -u origin nome-da-branch</code>.</li>
-      <li>Abra o pull request pelo site do GitHub.</li>
-    </ol>
+        <h2 id="casa">Em casa: Git e VS Code instalados (opcional)</h2>
+        <ol class="passos">
+          <li>Instale o <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> e o <a href="https://code.visualstudio.com" target="_blank" rel="noopener">VS Code</a>.</li>
+          <li>No terminal: <code>git clone https://github.com/seu-usuario/techburger.git</code></li>
+          <li>Para cada tarefa: <code>git switch -c nome-da-branch</code>, edite, <code>git add .</code>, <code>git commit -m "Verbo + o quê"</code>, <code>git push -u origin nome-da-branch</code>.</li>
+          <li>Abra o pull request pelo site do GitHub.</li>
+        </ol>
+      </article>
+    </div>
   </main>
 
-  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <footer class="conteudo rodape">
+    <span>AprendendoDev · Turma 103513 · Técnico em Desenvolvimento de Sistemas</span>
+    <span><a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">Repositório</a> · <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Quadro</a></span>
+  </footer>
   <script src="portal.js"></script>
 </body>
 </html>

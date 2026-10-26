@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sprint · AprendendoDev</title>
+  <meta name="description" content="A sprint atual, o placar e a sua próxima tarefa.">
+  <meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body data-pagina="tarefas">
   <header class="topo">
     <div class="conteudo">
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
-      <nav>
+      <nav aria-label="Principal">
         <a href="./">Início</a>
         <a href="comecar.html">Começar</a>
         <a href="tarefas.html" aria-current="page">Sprint</a>
@@ -22,36 +28,47 @@
   </header>
 
   <main class="conteudo">
-    <p class="rotulo-sprint" id="aula-sprint"></p>
-    <h1 id="titulo-sprint">Sprint</h1>
-    <p id="objetivo-sprint"></p>
-    <div class="placar" id="placar"></div>
+    <section class="cabecalho-sprint">
+      <div>
+        <span class="rotulo-sprint" id="aula-sprint">&nbsp;</span>
+        <h1 id="titulo-sprint">Sprint</h1>
+        <p id="objetivo-sprint"></p>
+      </div>
+      <div class="placar" id="placar" aria-live="polite"><div class="esqueleto" style="height:58px"></div></div>
+    </section>
 
-    <h2 id="minha">Minha tarefa</h2>
-    <form class="busca" id="buscar">
-      <label for="usuario" hidden>Usuário do GitHub</label>
-      <input id="usuario" placeholder="seu usuário do GitHub" autocomplete="username" autocapitalize="off" spellcheck="false">
-      <button type="submit">Ver</button>
-    </form>
-    <div id="minhas"></div>
+    <section class="secao-minha" id="minha">
+      <h2>Minha tarefa</h2>
+      <form class="busca" id="buscar">
+        <label for="usuario" hidden>Usuário do GitHub</label>
+        <input id="usuario" placeholder="Seu usuário do GitHub" autocomplete="username" autocapitalize="off" spellcheck="false">
+        <button type="submit">Ver</button>
+      </form>
+      <div id="minhas" aria-live="polite"></div>
 
-    <details class="destaque como-pegar">
-      <summary>Como funciona (passo a passo)</summary>
-      <ol>
-        <li>Escolha uma tarefa <strong>Livre</strong> do <strong>seu squad</strong> e clique em <em>Pegar esta tarefa</em>: a Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
-        <li>Na Issue, cole o <code>/eu-pego</code> na caixa de comentário e clique em <strong>Comment</strong>. Em segundos o robô do time responde e a tarefa fica com você.</li>
-        <li>Volte aqui: o botão <strong>Editar</strong> abre o arquivo da tarefa no GitHub. Escreva, clique em <strong>Commit changes</strong> e depois em <strong>Create pull request</strong>. A tarefa passa para <strong>Em revisão</strong>.</li>
-        <li>Desistiu? Comente <code>/largar</code> na Issue. Regra do quadro: <strong>1 tarefa por vez</strong>.</li>
-      </ol>
-    </details>
+      <details class="como-pegar">
+        <summary>Como funciona, passo a passo</summary>
+        <ol>
+          <li>Escolha uma tarefa <strong>Livre</strong> do <strong>seu squad</strong> e clique em <em>Pegar esta tarefa</em>: a Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
+          <li>Na Issue, cole o <code>/eu-pego</code> na caixa de comentário e clique em <strong>Comment</strong>. Em segundos o robô do time responde e a tarefa fica com você.</li>
+          <li>Volte aqui: o botão <strong>Editar</strong> (ou <strong>Abrir no draw.io</strong>, para diagramas) abre o arquivo da tarefa. Salve e clique em <strong>Create pull request</strong>. A tarefa passa para <strong>Em revisão</strong>.</li>
+          <li>Desistiu? Comente <code>/largar</code> na Issue. Regra do quadro: <strong>1 tarefa por vez</strong>.</li>
+        </ol>
+      </details>
+    </section>
 
-    <h2>As tarefas da sprint</h2>
-    <p class="vazio" id="atualizado"></p>
-    <div id="todas"></div>
-    <p>Quadro completo: aba <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Projects</a>.</p>
+    <div class="squad-titulo">
+      <h2>As tarefas da sprint</h2>
+      <p class="atualizado" id="atualizado"></p>
+    </div>
+    <div id="todas"><div class="grade"><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div></div></div>
+    <p class="sub">Quadro completo no <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">GitHub Projects</a>.</p>
   </main>
 
-  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <footer class="conteudo rodape">
+    <span>AprendendoDev · Turma 103513 · Técnico em Desenvolvimento de Sistemas</span>
+    <span><a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">Repositório</a> · <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Quadro</a></span>
+  </footer>
   <script src="portal.js"></script>
 </body>
 </html>

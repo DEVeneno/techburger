@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Time · AprendendoDev</title>
+  <meta name="description" content="Os devs da AprendendoDev, por squad.">
+  <meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body data-pagina="time">
   <header class="topo">
     <div class="conteudo">
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
-      <nav>
+      <nav aria-label="Principal">
         <a href="./">Início</a>
         <a href="comecar.html">Começar</a>
         <a href="tarefas.html">Sprint</a>
@@ -22,12 +28,16 @@
   </header>
 
   <main class="conteudo">
+    <span class="sobretitulo">Quem constrói</span>
     <h1>O time</h1>
-    <p><span id="total">0 devs</span> em 5 squads. O seu card aparece aqui depois que o seu pull request recebe o merge. Ainda não fez? <a href="comecar.html">Crie o seu card aqui</a>.</p>
-    <div id="time"></div>
+    <p class="lead"><span id="total">0 devs</span> em 5 squads. O seu card aparece aqui depois que o seu pull request recebe o merge. Ainda não fez? <a href="comecar.html">Crie o seu card</a>.</p>
+    <div id="time"><div class="grade"><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div></div></div>
   </main>
 
-  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <footer class="conteudo rodape">
+    <span>AprendendoDev · Turma 103513 · Técnico em Desenvolvimento de Sistemas</span>
+    <span><a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">Repositório</a> · <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Quadro</a></span>
+  </footer>
   <script src="portal.js"></script>
 </body>
 </html>

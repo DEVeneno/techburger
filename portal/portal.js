@@ -148,40 +148,67 @@ async function iniciarHome() {
   const { atual, proxima } = await sprintAtual();
   const caixa = document.getElementById('sprint');
   if (!atual || !caixa) return;
-  caixa.querySelector('.rotulo').textContent = atual.nome + ' · ' + atual.aula;
+  caixa.querySelector('.rotulo').textContent = 'Sprint atual · ' + atual.aula;
+  caixa.querySelector('.nome-sprint').textContent = atual.nome;
   caixa.querySelector('.objetivo').textContent = atual.objetivo;
-  caixa.querySelector('.proxima').textContent = proxima ? 'Próxima: ' + proxima.nome + ' (' + proxima.aula + ')' : '';
+  caixa.querySelector('.proxima').textContent = proxima ? 'Próxima: ' + proxima.nome + ', ' + proxima.aula : '';
+  caixa.classList.add('surgir');
   document.querySelectorAll('[data-sprint]').forEach((linha) => {
-    if (Number(linha.dataset.sprint) === atual.numero) linha.classList.add('atual');
+    const n = Number(linha.dataset.sprint);
+    linha.classList.toggle('atual', n === atual.numero);
+    linha.classList.toggle('feita', n < atual.numero);
   });
   const u = lerUsuario();
   const ola = document.getElementById('ola');
   if (u && ola) {
-    ola.textContent = 'Olá, @' + u + '! ';
-    ola.appendChild(link('Ver a minha tarefa', 'tarefas.html#minha'));
-    ola.querySelector('a').removeAttribute('target');
+    ola.textContent = 'Olá, @' + u;
+    const a = el('a', 'Ver a minha tarefa');
+    a.href = 'tarefas.html#minha';
+    ola.appendChild(a);
     ola.hidden = false;
   }
 }
 
 // ---------- time
+// foto do perfil do GitHub; se não carregar, a inicial do nome
+function avatar(d) {
+  const img = document.createElement('img');
+  img.className = 'avatar';
+  img.alt = '';
+  img.loading = 'lazy';
+  img.src = 'https://github.com/' + encodeURIComponent(d.github) + '.png?size=96';
+  img.addEventListener('error', () => img.replaceWith(el('span', (d.nome || '?').charAt(0).toUpperCase(), 'avatar')));
+  return img;
+}
+
 async function iniciarTime() {
   const [time, vagas] = await Promise.all([lerJSON('dados/time.json', []), lerJSON('squads.json', {})]);
   const alvo = document.getElementById('time');
+  alvo.replaceChildren();
+  alvo.classList.add('surgir');
   document.getElementById('total').textContent = time.length + (time.length === 1 ? ' dev' : ' devs');
   for (const squad of SQUADS.concat(['Sem squad'])) {
     const devs = time.filter((d) => d.squad === squad);
     if (squad === 'Sem squad' && !devs.length) continue;
-    alvo.appendChild(el('h2', 'Squad ' + squad + (vagas[squad] ? ' (' + devs.length + ' de ' + vagas[squad] + ')' : ' (' + devs.length + ')')));
-    if (vagas[squad] && devs.length > vagas[squad]) alvo.appendChild(el('p', 'Este squad passou do número de vagas: o professor vai acertar a divisão.', 'problemas'));
+    const cab = el('div', null, 'squad-titulo');
+    const h = el('h2', 'Squad ' + squad + ' ');
+    h.appendChild(el('span', vagas[squad] ? devs.length + ' de ' + vagas[squad] : String(devs.length), 'contador'));
+    cab.appendChild(h);
+    alvo.appendChild(cab);
+    if (vagas[squad] && devs.length > vagas[squad]) alvo.appendChild(el('p', 'Este squad passou do número de vagas: o professor vai acertar a divisão.', 'alerta'));
     const grade = el('div', null, 'grade');
-    if (!devs.length) grade.appendChild(el('p', 'Ninguém ainda: abra o seu pull request!', 'vazio'));
+    if (!devs.length) grade.appendChild(el('p', 'Ninguém ainda.', 'vazio'));
     for (const d of devs) {
       const c = el('div', null, 'cartao');
-      c.appendChild(el('h3', d.nome));
+      const pessoa = el('div', null, 'pessoa');
+      pessoa.appendChild(avatar(d));
+      const quem = el('div');
+      quem.appendChild(el('h3', d.nome));
       const sub = el('p', null, 'sub');
       sub.appendChild(link('@' + d.github, 'https://github.com/' + encodeURIComponent(d.github)));
-      c.appendChild(sub);
+      quem.appendChild(sub);
+      pessoa.appendChild(quem);
+      c.appendChild(pessoa);
       if (d.aprender) c.appendChild(el('p', 'Quer aprender: ' + d.aprender));
       if (d.curiosidade) c.appendChild(el('p', 'Curiosidade: ' + d.curiosidade));
       grade.appendChild(c);
@@ -290,7 +317,13 @@ function cartaoTarefa(t, detalhado) {
   if (t.arquivo) {
     const p = el('p', null, 'sub');
     p.appendChild(document.createTextNode('Arquivo: '));
-    p.appendChild(el('code', t.arquivo));
+    // caminho longo: só quebra a linha depois das barras
+    const code = el('code');
+    t.arquivo.split('/').forEach((parte, k, todas) => {
+      code.appendChild(document.createTextNode(parte + (k < todas.length - 1 ? '/' : '')));
+      if (k < todas.length - 1) code.appendChild(document.createElement('wbr'));
+    });
+    p.appendChild(code);
     c.appendChild(p);
   }
   if (t.aberta && deTodos(t)) {
@@ -438,7 +471,7 @@ function desenharMinhas(u, contexto) {
 function desenharSprint(contexto) {
   const { dados, time, daSprint, meuSquad } = contexto;
   if (dados.atualizado) {
-    document.getElementById('atualizado').textContent = 'Atualizado às ' + new Date(dados.atualizado).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. Esta página se atualiza sozinha a cada minuto.';
+    document.getElementById('atualizado').textContent = 'Atualizado às ' + new Date(dados.atualizado).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · confere sozinho a cada minuto';
   }
   const placar = document.getElementById('placar');
   placar.replaceChildren();
@@ -446,23 +479,35 @@ function desenharSprint(contexto) {
   const contagens = contexto.numero === 0
     ? [['Cards no time', 'pronto', time.length], ['Cards em revisão', 'revisao', issue1 ? issue1.prs.length : 0]]
     : [['Livre', 'livre'], ['Fazendo', 'fazendo'], ['Em revisão', 'revisao'], ['Pronto', 'pronto']].map(([nome, classe]) => [nome, classe, daSprint.filter((t) => situacao(t).nome === nome).length]);
-  placar.classList.toggle('dois', contagens.length === 2);
+  // barra de progresso da sprint + legenda com os números
+  const barra = el('div', null, 'barra');
+  barra.setAttribute('aria-hidden', 'true');
+  const legenda = el('div', null, 'legenda');
   for (const [nome, classe, n] of contagens) {
-    const caixa = el('div', null, 'placar-item ' + classe);
+    const parte = el('span', null, classe);
+    parte.style.flexGrow = String(n);
+    barra.appendChild(parte);
+    const caixa = el('span', null, 'placar-item ' + classe);
     caixa.appendChild(el('strong', String(n)));
-    caixa.appendChild(el('span', nome));
-    placar.appendChild(caixa);
+    caixa.appendChild(document.createTextNode(nome));
+    legenda.appendChild(caixa);
   }
+  placar.append(barra, legenda);
   const todas = document.getElementById('todas');
   todas.replaceChildren();
+  todas.classList.add('surgir');
   // o squad de quem está usando aparece primeiro
   const ordem = meuSquad ? [meuSquad].concat(SQUADS.filter((s) => s !== meuSquad)) : SQUADS;
   for (const squad of ordem.concat([null])) {
     const lista = daSprint.filter((t) => t.squad === squad);
     if (!lista.length) continue;
     const devs = time.filter((d) => d.squad === squad).map((d) => '@' + d.github);
-    todas.appendChild(el('h2', (squad ? 'Squad ' + squad : 'Para todos') + (squad && squad === meuSquad ? ' (o seu)' : '')));
-    if (squad && devs.length) todas.appendChild(el('p', devs.join('  ·  '), 'sub'));
+    const cab = el('div', null, 'squad-titulo');
+    const h = el('h2', squad ? 'Squad ' + squad + ' ' : 'Para todos');
+    if (squad && squad === meuSquad) h.appendChild(el('span', 'o seu', 'etiqueta'));
+    cab.appendChild(h);
+    if (squad && devs.length) cab.appendChild(el('p', devs.join(' · '), 'sub'));
+    todas.appendChild(cab);
     const grade = el('div', null, 'grade');
     lista.sort((a, b) => a.numero - b.numero).forEach((t) => grade.appendChild(cartaoTarefa(t, false)));
     todas.appendChild(grade);

@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Começar · AprendendoDev</title>
+  <meta name="description" content="O primeiro passo: o seu card no time.">
+  <meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="estilo.css">
 </head>
 <body data-pagina="comecar">
   <header class="topo">
     <div class="conteudo">
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
-      <nav>
+      <nav aria-label="Principal">
         <a href="./">Início</a>
         <a href="comecar.html" aria-current="page">Começar</a>
         <a href="tarefas.html">Sprint</a>
@@ -22,10 +28,11 @@
   </header>
 
   <main class="conteudo">
-    <p class="rotulo-sprint">Sprint 0 · uma vez só</p>
+    <span class="sobretitulo">Sprint 0 · uma vez só</span>
     <h1>Começar: o seu card no time</h1>
-    <p>Todo dev da AprendendoDev tem um card na pasta <code>equipe/</code>. É o seu primeiro pull request: depois do merge, você aparece na página <a href="time.html">Time</a> e o robô já sabe qual é o seu squad.</p>
+    <p class="lead">Todo dev da AprendendoDev tem um card na pasta <code>equipe/</code>. É o seu primeiro pull request: depois do merge, você aparece na página <a href="time.html">Time</a> e o robô já sabe qual é o seu squad.</p>
 
+    <section class="secao-minha">
     <ol class="trilha">
       <li class="agora">
         <strong>1. Ter uma conta no GitHub</strong>
@@ -80,11 +87,15 @@
         <p>O professor revisa e faz o merge. Acompanhe na página <a href="tarefas.html#minha">Sprint › Minha tarefa</a>: quando o card entrar, o passo fica verde e você já pode pegar uma tarefa.</p>
       </li>
     </ol>
+    </section>
 
     <p class="sub">Prefere fazer tudo à mão? Veja o <a href="guias.html#primeiro-pr">guia do primeiro pull request</a>.</p>
   </main>
 
-  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <footer class="conteudo rodape">
+    <span>AprendendoDev · Turma 103513 · Técnico em Desenvolvimento de Sistemas</span>
+    <span><a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">Repositório</a> · <a href="https://github.com/orgs/aprendendodev/projects/1" target="_blank" rel="noopener">Quadro</a></span>
+  </footer>
   <script src="portal.js"></script>
 </body>
 </html>
