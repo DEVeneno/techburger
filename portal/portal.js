@@ -439,7 +439,8 @@ function desenharMinhas(u, contexto) {
     } else {
       passos.appendChild(el('li', 'Clique em Editar. Se o GitHub pedir, clique em Fork this repository.'));
       passos.appendChild(el('li', 'Escreva no arquivo o que o critério de aceite pede.'));
-      passos.appendChild(el('li', 'Clique em Commit changes..., escreva o que fez (ex.: Escreve as histórias do carrinho) e clique em Propose changes.'));
+      const arquivo = (arquivosDa(comigo)[0] || 'arquivo').split('/').pop();
+      passos.appendChild(el('li', 'Clique em Commit changes..., escreva o que fez com verbo + o quê (ex.: Preenche ' + arquivo + ') e clique em Propose changes.'));
     }
     passos.appendChild(el('li', 'Clique em Create pull request. No campo Issue, escreva Closes #' + comigo.numero + ' (se esquecer, o robô coloca).'));
     li.appendChild(passos);
