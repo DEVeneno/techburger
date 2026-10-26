@@ -66,6 +66,6 @@ jobs:
             const arquivos = [...new Set((secao ? secao[1] : '').match(/[\w.\-/]+\.(?:md|drawio|html|css|js|json)\b/g) || [])];
             const pasta = (f) => f.split('/').slice(0, -1).join('/');
             const links = arquivos.map((f) => f.endsWith('.drawio')
-              ? `[Enviar o diagrama em ${pasta(f)}/](https://github.com/${owner}/${repo}/upload/main/${pasta(f)})`
+              ? `[Abrir ${f.split('/').pop()} no draw.io](https://app.diagrams.net/#U${encodeURIComponent('https://raw.githubusercontent.com/' + owner + '/' + repo + '/main/' + f)}) e depois [enviar em ${pasta(f)}/](https://github.com/${owner}/${repo}/upload/main/${pasta(f)}) (salve com Arquivo › Salvar como › Dispositivo)`
               : `[Editar ${f}](https://github.com/${owner}/${repo}/edit/main/${f})`).join(' · ');
             return responder(`✅ Tarefa com @${quem}.\n\n**Próximos passos:**\n1. Leia a história e o critério de aceite acima.\n2. Abra o arquivo: ${links || 'veja o campo Arquivo acima'}. Se o GitHub pedir, clique em **Fork this repository**.\n3. Escreva o que o critério pede, clique em **Commit changes...** e depois em **Propose changes**.\n4. Clique em **Create pull request** e escreva \`Closes #${issue.number}\` no campo Issue (se esquecer, o robô coloca).\n\nO seu passo a passo também aparece em https://aprendendodev.com.br/tarefas.html#minha${aviso}`);

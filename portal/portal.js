@@ -102,7 +102,10 @@ function botoesArquivo(t) {
   const caixa = el('div', null, 'botoes');
   for (const arq of arquivosDa(t)) {
     if (arq.endsWith('.drawio')) {
-      caixa.appendChild(link('Enviar ' + arq.split('/').pop(), REPO + '/upload/main/' + arq.split('/').slice(0, -1).join('/'), 'botao pequeno'));
+      // o ponto de partida do squad abre direto no draw.io do navegador
+      const bruto = 'https://raw.githubusercontent.com/aprendendodev/techburger/main/' + arq;
+      caixa.appendChild(link('Abrir no draw.io', 'https://app.diagrams.net/#U' + encodeURIComponent(bruto), 'botao pequeno'));
+      caixa.appendChild(link('Enviar ' + arq.split('/').pop(), REPO + '/upload/main/' + arq.split('/').slice(0, -1).join('/'), 'botao pequeno secundario'));
     } else {
       caixa.appendChild(link('Editar ' + arq.split('/').pop(), REPO + '/edit/main/' + arq, 'botao pequeno'));
     }
@@ -394,9 +397,17 @@ function desenharMinhas(u, contexto) {
       li.appendChild(p);
     }
     const passos = el('ol', null, 'mini');
-    passos.appendChild(el('li', 'Clique no botão abaixo. Se o GitHub pedir, clique em Fork this repository.'));
-    passos.appendChild(el('li', 'Escreva no arquivo o que o critério de aceite pede.'));
-    passos.appendChild(el('li', 'Clique em Commit changes..., escreva o que fez (ex.: Preenche a entrevista do cardápio) e clique em Propose changes.'));
+    const diagrama = arquivosDa(comigo).find((a) => a.endsWith('.drawio'));
+    if (diagrama) {
+      passos.appendChild(el('li', 'Clique em Abrir no draw.io: o ponto de partida do seu squad abre no navegador.'));
+      passos.appendChild(el('li', 'Desenhe o que o critério de aceite pede.'));
+      passos.appendChild(el('li', 'Salve no computador: Arquivo › Salvar como › Dispositivo, com o nome ' + diagrama.split('/').pop() + '.'));
+      passos.appendChild(el('li', 'Clique em Enviar ' + diagrama.split('/').pop() + ' (se o GitHub pedir, Fork this repository), arraste o arquivo e clique em Propose changes.'));
+    } else {
+      passos.appendChild(el('li', 'Clique em Editar. Se o GitHub pedir, clique em Fork this repository.'));
+      passos.appendChild(el('li', 'Escreva no arquivo o que o critério de aceite pede.'));
+      passos.appendChild(el('li', 'Clique em Commit changes..., escreva o que fez (ex.: Escreve as histórias do carrinho) e clique em Propose changes.'));
+    }
     passos.appendChild(el('li', 'Clique em Create pull request. No campo Issue, escreva Closes #' + comigo.numero + ' (se esquecer, o robô coloca).'));
     li.appendChild(passos);
     const botoes = botoesArquivo(comigo);
