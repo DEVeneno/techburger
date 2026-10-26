@@ -20,13 +20,6 @@ for n in 0 1 2 3 4 5 6 7 8; do etiqueta "sprint-$n" DAE8FC "Sprint $n"; done
 gh issue create --repo "$REPO" --label sprint-0 \
   --title "Sprint 0: cada dev adiciona o seu card na pasta equipe" \
   --body "$(cat <<'EOF'
-**Como** dev da AprendendoDev, **quero** ter o meu card na pasta \`equipe/\`, **para** aparecer na página Time do portal.
-
-**Critério de aceite:** Dado o arquivo \`equipe/seu-usuario.md\` no formato do \`_modelo.md\`, Quando o pull request recebe o merge, Então o card aparece em aprendendodev.com.br/time.html.
-
-Esta Issue é de **todos**: no seu pull request, escreva **Parte de #1** (e não "Closes #1").
-
-Passo a passo: https://aprendendodev.com.br/guias.html#primeiro-pr
 EOF
 )"
 echo "Pronto: etiquetas e Issue #1 criadas."
