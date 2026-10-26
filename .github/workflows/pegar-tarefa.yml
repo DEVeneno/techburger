@@ -35,6 +35,7 @@ jobs:
               return responder(`Tarefa devolvida por @${quem}: está **livre** de novo para o squad.`);
             }
 
+            if (issue.number === 1 || etiquetas.includes('sprint-0')) return responder(`@${quem}, esta Issue é de **todos**: não precisa pegar. Monte o seu card em https://aprendendodev.com.br/comecar.html e abra o pull request com \`Parte de #1\`.`);
             if (issue.state === 'closed') return responder(`@${quem}, esta tarefa já foi concluída. Escolha outra **Livre** na página da Sprint: https://aprendendodev.com.br/tarefas.html`);
             if (donos.length) return responder(`@${quem}, esta tarefa já está com @${donos.join(', @')}. Escolha outra **Livre** na página da Sprint: https://aprendendodev.com.br/tarefas.html`);
 
@@ -59,5 +60,12 @@ jobs:
 
             await github.rest.issues.addAssignees({ owner, repo, issue_number: issue.number, assignees: [quem] });
             await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: ['fazendo'] });
-            const aviso = squadDev ? '' : '\n\n> Ainda não achei o seu card em `equipe/`. Termine o pull request da Sprint 0 (Issue #1).';
-            return responder(`✅ Tarefa com @${quem}.\n\n**Próximos passos:**\n1. Leia a história e o critério de aceite acima.\n2. Atualize o seu fork (**Sync fork › Update branch**).\n3. Edite **só o arquivo da tarefa** no seu fork, numa branch nova.\n4. Abra o pull request com \`Closes #${issue.number}\`.\n\nGuia: https://aprendendodev.com.br/guias.html#tarefa${aviso}`);
+            const aviso = squadDev ? '' : '\n\n> Ainda não achei o seu card em `equipe/`. Termine o pull request da Sprint 0: https://aprendendodev.com.br/comecar.html';
+            // links diretos para o arquivo da tarefa (o GitHub cria o fork sozinho)
+            const secao = /###\s*Arquivo[^\n]*\n+([\s\S]*?)(?=\n###\s|\n---|$)/i.exec(issue.body || '');
+            const arquivos = [...new Set((secao ? secao[1] : '').match(/[\w.\-/]+\.(?:md|drawio|html|css|js|json)\b/g) || [])];
+            const pasta = (f) => f.split('/').slice(0, -1).join('/');
+            const links = arquivos.map((f) => f.endsWith('.drawio')
+              ? `[Enviar o diagrama em ${pasta(f)}/](https://github.com/${owner}/${repo}/upload/main/${pasta(f)})`
+              : `[Editar ${f}](https://github.com/${owner}/${repo}/edit/main/${f})`).join(' · ');
+            return responder(`✅ Tarefa com @${quem}.\n\n**Próximos passos:**\n1. Leia a história e o critério de aceite acima.\n2. Abra o arquivo: ${links || 'veja o campo Arquivo acima'}. Se o GitHub pedir, clique em **Fork this repository**.\n3. Escreva o que o critério pede, clique em **Commit changes...** e depois em **Propose changes**.\n4. Clique em **Create pull request** e escreva \`Closes #${issue.number}\` no campo Issue (se esquecer, o robô coloca).\n\nO seu passo a passo também aparece em https://aprendendodev.com.br/tarefas.html#minha${aviso}`);

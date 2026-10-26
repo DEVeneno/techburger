@@ -5,8 +5,11 @@ Bem-vindo(a) à AprendendoDev! Aqui estão as regras que todo dev segue. Elas va
 ## 0. Como pegar uma tarefa
 
 1. No portal, abra **[Sprint](https://aprendendodev.com.br/tarefas.html)** e escolha uma tarefa **Livre** do seu squad.
-2. Na Issue, comente **`/eu-pego`**. O robô do time atribui a tarefa a você (se ela estiver livre, for do seu squad e você não tiver outra em andamento).
-3. Desistiu ou travou de vez? Comente **`/largar`** para devolver a tarefa.
+2. Na Issue, comente **`/eu-pego`**. O robô do time atribui a tarefa a você (se ela estiver livre, for do seu squad e você não tiver outra em andamento) e responde com o link para editar o arquivo da tarefa.
+3. Abra o pull request com `Closes #número`. Esqueceu? O robô confere todo PR novo: liga o PR à sua tarefa e avisa se ele mexe em arquivo de fora.
+4. Desistiu ou travou de vez? Comente **`/largar`** para devolver a tarefa.
+
+Primeira vez? O card da Sprint 0 se monta em **[Começar](https://aprendendodev.com.br/comecar.html)**.
 
 ## 1. O caminho de toda contribuição
 

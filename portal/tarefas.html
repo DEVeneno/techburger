@@ -12,6 +12,7 @@
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
       <nav>
         <a href="./">Início</a>
+        <a href="comecar.html">Começar</a>
         <a href="tarefas.html" aria-current="page">Sprint</a>
         <a href="time.html">Time</a>
         <a href="guias.html">Guias</a>
@@ -26,23 +27,23 @@
     <p id="objetivo-sprint"></p>
     <div class="placar" id="placar"></div>
 
-    <h2>Minha tarefa</h2>
+    <h2 id="minha">Minha tarefa</h2>
     <form class="busca" id="buscar">
       <label for="usuario" hidden>Usuário do GitHub</label>
-      <input id="usuario" placeholder="@seu-usuario" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <input id="usuario" placeholder="seu usuário do GitHub" autocomplete="username" autocapitalize="off" spellcheck="false">
       <button type="submit">Ver</button>
     </form>
     <div id="minhas"></div>
 
-    <div class="destaque como-pegar">
-      <div class="rotulo">Como pegar uma tarefa</div>
+    <details class="destaque como-pegar">
+      <summary>Como funciona (passo a passo)</summary>
       <ol>
-        <li>Escolha uma tarefa <strong>Livre</strong> do <strong>seu squad</strong> e clique em <em>Pegar esta tarefa</em>.</li>
-        <li>Na Issue, escreva o comentário <code>/eu-pego</code> e envie. Em alguns segundos o robô do time responde e a tarefa fica com você.</li>
-        <li>Faça a tarefa no seu fork e abra o pull request com <code>Closes #número</code>. A tarefa passa para <strong>Em revisão</strong>.</li>
+        <li>Escolha uma tarefa <strong>Livre</strong> do <strong>seu squad</strong> e clique em <em>Pegar esta tarefa</em>: a Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
+        <li>Na Issue, cole o <code>/eu-pego</code> na caixa de comentário e clique em <strong>Comment</strong>. Em segundos o robô do time responde e a tarefa fica com você.</li>
+        <li>Volte aqui: o botão <strong>Editar</strong> abre o arquivo da tarefa no GitHub. Escreva, clique em <strong>Commit changes</strong> e depois em <strong>Create pull request</strong>. A tarefa passa para <strong>Em revisão</strong>.</li>
         <li>Desistiu? Comente <code>/largar</code> na Issue. Regra do quadro: <strong>1 tarefa por vez</strong>.</li>
       </ol>
-    </div>
+    </details>
 
     <h2>As tarefas da sprint</h2>
     <p class="vazio" id="atualizado"></p>

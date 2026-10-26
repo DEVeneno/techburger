@@ -1,0 +1,108 @@
+name: Conferir pull request
+
+# Quando um pull request é aberto, o robô do time:
+#   1. liga o PR à tarefa se o dev esqueceu ("Closes #N" ou, no card, "Parte de #1");
+#   2. avisa se o PR mexe em arquivos de fora da tarefa;
+#   3. confere o card (squad e usuário) na Sprint 0.
+# Roda no contexto do repositório da empresa e só lê o PR pela API: nunca executa o código dele.
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+  actions: write
+
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const autor = pr.user.login;
+            const corpo = pr.body || '';
+            const SQUADS = ['cardapio', 'carrinho', 'pagamento', 'cozinha', 'cliente'];
+            const semAcento = (s) => (s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+            const arquivos = (await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: pr.number, per_page: 100 })).map((f) => f.filename);
+            const card = `equipe/${autor}.md`;
+            const avisos = [];
+
+            // 1. ligar o PR à tarefa
+            const citada = /(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|parte de)\s+#(\d+)/i.exec(`${pr.title} ${corpo}`);
+            let numero = citada ? Number(citada[1]) : null;
+            let ligacao = '';
+            if (!numero) {
+              if (arquivos.some((f) => f.toLowerCase() === card.toLowerCase())) {
+                numero = 1;
+                ligacao = 'Parte de #1';
+              } else {
+                const minhas = (await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: 'open', assignee: autor, per_page: 100 }))
+                  .filter((i) => !i.pull_request && i.number !== 1);
+                if (minhas.length === 1) {
+                  numero = minhas[0].number;
+                  ligacao = `Closes #${numero}`;
+                } else if (!minhas.length) {
+                  avisos.push('Não achei nenhuma tarefa com você. Pegue a tarefa na página da Sprint (comente `/eu-pego` na Issue) e escreva `Closes #número` na descrição deste PR.');
+                } else {
+                  avisos.push(`Você está com mais de uma tarefa (#${minhas.map((i) => i.number).join(', #')}). Escreva na descrição deste PR qual ele resolve: \`Closes #número\`.`);
+                }
+              }
+              if (ligacao) {
+                await github.rest.pulls.update({ owner, repo, pull_number: pr.number, body: `${corpo}\n\n${ligacao}`.trim() });
+              }
+            }
+
+            // 2. arquivos esperados: os citados na tarefa (ou o card)
+            let esperados = [];
+            if (numero === 1) esperados = [card];
+            else if (numero) {
+              try {
+                const issue = (await github.rest.issues.get({ owner, repo, issue_number: numero })).data;
+                const secao = /###\s*Arquivo[^\n]*\n+([\s\S]*?)(?=\n###\s|\n---|$)/i.exec(issue.body || '');
+                esperados = ((secao ? secao[1] : '').match(/[\w.\-/]+\.(?:md|drawio|html|css|js|json)\b/g) || []);
+                if (!issue.assignees.some((a) => a.login === autor)) {
+                  avisos.push(`A tarefa #${numero} não está com você. Se é sua, comente \`/eu-pego\` lá (ou combine com quem está com ela).`);
+                }
+              } catch (e) {}
+            }
+            const pastas = esperados.filter((f) => f.endsWith('.drawio')).map((f) => f.split('/').slice(0, -1).join('/') + '/');
+            const fora = esperados.length ? arquivos.filter((f) => !esperados.some((e) => e.toLowerCase() === f.toLowerCase()) && !pastas.some((p) => f.startsWith(p))) : [];
+            if (fora.length) {
+              avisos.push(`Este PR mexe em arquivo(s) de fora da tarefa: ${fora.map((f) => '`' + f + '`').join(', ')}. Se foi sem querer, apague a mudança desses arquivos. Lembre: **uma tarefa = um PR**.`);
+            }
+
+            // 3. o card da Sprint 0
+            if (arquivos.some((f) => f.toLowerCase() === card.toLowerCase())) {
+              try {
+                const resp = await github.rest.repos.getContent({ owner, repo, path: card, ref: pr.head.sha });
+                const texto = Buffer.from(resp.data.content, 'base64').toString('utf8');
+                const linha = (nome) => texto.split('\n').find((l) => semAcento(l).trim().startsWith('- ' + nome));
+                const squad = semAcento((linha('squad') || '').split(':').slice(1).join(':'));
+                if (!SQUADS.some((s) => squad.includes(s)) || SQUADS.filter((s) => squad.includes(s)).length > 1) {
+                  avisos.push('No card, a linha `- Squad:` precisa ter **um** squad só: Cardápio, Carrinho, Pagamento, Cozinha ou Cliente.');
+                }
+                const gh = ((linha('github') || '').split(':').slice(1).join(':')).trim().replace(/^@/, '');
+                if (gh && gh.toLowerCase() !== autor.toLowerCase()) avisos.push(`No card, a linha \`- GitHub:\` diz @${gh}, mas este PR é de @${autor}.`);
+                if (/\d{3}\.?\d{3}\.?\d{3}-?\d{2}|\d{11}/.test(texto)) avisos.push('O card parece ter um número de documento ou matrícula. Tire: o repositório é público.');
+              } catch (e) {}
+            } else if (arquivos.some((f) => f.startsWith('equipe/') && !f.startsWith('equipe/_'))) {
+              avisos.push(`O card precisa se chamar \`${card}\` (o seu usuário do GitHub), senão o portal não acha você.`);
+            }
+
+            // resposta no PR
+            const linhas = [];
+            if (ligacao) linhas.push(`🔗 Liguei este PR à tarefa: acrescentei \`${ligacao}\` na descrição.`);
+            if (avisos.length) linhas.push('**Confira antes da revisão:**\n' + avisos.map((a) => '- ' + a).join('\n'));
+            else linhas.push(`✅ Tudo certo, @${autor}! ${numero === 1 ? 'Agora é aguardar a revisão do professor.' : 'Peça ao Tech Lead do squad para revisar.'}`);
+            linhas.push('Se pedirem mudança: edite o mesmo arquivo no seu fork, na mesma branch (`' + pr.head.ref + '`). O PR se atualiza sozinho.');
+            await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body: linhas.join('\n\n') });
+
+            // a mudança feita pelo robô não dispara a publicação sozinha: pede para o portal se atualizar
+            if (ligacao) {
+              try { await github.rest.actions.createWorkflowDispatch({ owner, repo, workflow_id: 'site.yml', ref: 'main' }); } catch (e) {}
+            }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Começar · AprendendoDev</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body data-pagina="comecar">
+  <header class="topo">
+    <div class="conteudo">
+      <a class="marca" href="./">Aprendendo<span>Dev</span></a>
+      <nav>
+        <a href="./">Início</a>
+        <a href="comecar.html" aria-current="page">Começar</a>
+        <a href="tarefas.html">Sprint</a>
+        <a href="time.html">Time</a>
+        <a href="guias.html">Guias</a>
+        <a href="app/">O app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <p class="rotulo-sprint">Sprint 0 · uma vez só</p>
+    <h1>Começar: o seu card no time</h1>
+    <p>Todo dev da AprendendoDev tem um card na pasta <code>equipe/</code>. É o seu primeiro pull request: depois do merge, você aparece na página <a href="time.html">Time</a> e o robô já sabe qual é o seu squad.</p>
+
+    <ol class="trilha">
+      <li class="agora">
+        <strong>1. Ter uma conta no GitHub</strong>
+        <p>Já tem? Entre nela. Não tem? Crie com o seu e-mail e escolha um usuário simples (ex.: <code>maria-silva</code>).</p>
+        <div class="botoes">
+          <a class="botao pequeno secundario" href="https://github.com/login" target="_blank" rel="noopener">Entrar no GitHub</a>
+          <a class="botao pequeno secundario" href="https://github.com/signup" target="_blank" rel="noopener">Criar conta</a>
+        </div>
+      </li>
+      <li class="agora">
+        <strong>2. Preencher o card</strong>
+        <form class="formulario" id="form-card" autocomplete="off">
+          <label>Primeiro nome <span class="sub">(só o primeiro: o repositório é público)</span>
+            <input id="c-nome" maxlength="40" placeholder="Maria">
+          </label>
+          <label>Usuário do GitHub
+            <input id="c-usuario" maxlength="60" placeholder="maria-silva" autocapitalize="off" spellcheck="false">
+          </label>
+          <label>Squad <span class="sub">(o professor diz qual é o seu)</span>
+            <select id="c-squad">
+              <option value="">Escolha...</option>
+              <option>Cardápio</option>
+              <option>Carrinho</option>
+              <option>Pagamento</option>
+              <option>Cozinha</option>
+              <option>Cliente</option>
+            </select>
+          </label>
+          <label>O que quero aprender neste projeto
+            <input id="c-aprender" maxlength="150" placeholder="Fazer um site que funciona de verdade">
+          </label>
+          <label>Uma curiosidade sobre mim
+            <input id="c-curiosidade" maxlength="150" placeholder="Jogo xadrez desde os 10 anos">
+          </label>
+        </form>
+        <ul class="problemas" id="problemas-card"></ul>
+        <p class="sub">Como o seu card vai ficar:</p>
+        <pre class="previa" id="previa-card"></pre>
+      </li>
+      <li class="agora">
+        <strong>3. Enviar para o GitHub</strong>
+        <div class="botoes" id="acoes-card"></div>
+        <ol class="mini">
+          <li>O botão abre o GitHub com o arquivo já preenchido. Se aparecer <strong>Fork this repository</strong>, clique nele.</li>
+          <li>Confira o nome do arquivo e o texto. Clique em <strong>Commit changes...</strong>, deixe a mensagem <code>Create seu-usuario.md</code> e clique em <strong>Propose changes</strong>.</li>
+          <li>Na tela <strong>Comparing changes</strong> (1 arquivo novo), clique em <strong>Create pull request</strong> duas vezes.</li>
+          <li>No campo Issue do modelo, escreva <code>Parte de #1</code>. Se esquecer, o robô do time coloca para você.</li>
+        </ol>
+      </li>
+      <li class="depois">
+        <strong>4. Aguardar o merge</strong>
+        <p>O professor revisa e faz o merge. Acompanhe na página <a href="tarefas.html#minha">Sprint › Minha tarefa</a>: quando o card entrar, o passo fica verde e você já pode pegar uma tarefa.</p>
+      </li>
+    </ol>
+
+    <p class="sub">Prefere fazer tudo à mão? Veja o <a href="guias.html#primeiro-pr">guia do primeiro pull request</a>.</p>
+  </main>
+
+  <footer class="conteudo rodape">AprendendoDev · Turma 103513</footer>
+  <script src="portal.js"></script>
+</body>
+</html>

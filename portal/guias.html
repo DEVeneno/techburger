@@ -12,6 +12,7 @@
       <a class="marca" href="./">Aprendendo<span>Dev</span></a>
       <nav>
         <a href="./">Início</a>
+        <a href="comecar.html">Começar</a>
         <a href="tarefas.html">Sprint</a>
         <a href="time.html">Time</a>
         <a href="guias.html" aria-current="page">Guias</a>
@@ -32,15 +33,16 @@
     </ul>
 
     <h2 id="primeiro-pr">O primeiro pull request (o seu card)</h2>
+    <p>Jeito rápido: a página <a href="comecar.html">Começar</a> monta o card e abre o GitHub com o arquivo já preenchido. Jeito à mão:</p>
     <ol class="passos">
       <li>Entre no GitHub e abra <a href="https://github.com/aprendendodev/techburger" target="_blank" rel="noopener">github.com/aprendendodev/techburger</a>.</li>
       <li>Clique na pasta <code>equipe</code>, abra o <code>_modelo.md</code> e copie o texto. Volte para a pasta e clique em <strong>Add file › Create new file</strong>.</li>
       <li>O GitHub pede um fork: clique em <strong>Fork this repository</strong>.</li>
       <li>No nome do arquivo, digite <code>seu-usuario.md</code> (o seu usuário do GitHub). Cole o modelo e preencha. Só o primeiro nome.</li>
-      <li>Clique em <strong>Commit changes...</strong>, escreva <code>Adiciona card de @seu-usuario</code> e clique em <strong>Propose changes</strong>.</li>
+      <li>Clique em <strong>Commit changes...</strong> e depois em <strong>Propose changes</strong>.</li>
       <li>Confira em <strong>Comparing changes</strong>: 1 arquivo novo, só o seu. Clique em <strong>Create pull request</strong>.</li>
-      <li>Preencha o modelo do PR. Na Issue, escreva <code>Parte de #1</code>. Clique em <strong>Create pull request</strong>.</li>
-      <li>Aguarde a revisão. Se o professor pedir mudança, edite o arquivo no <strong>seu fork</strong>, na mesma branch (<code>patch-1</code>): o PR se atualiza sozinho.</li>
+      <li>Preencha o modelo do PR. Na Issue, escreva <code>Parte de #1</code> (se esquecer, o robô coloca). Clique em <strong>Create pull request</strong>.</li>
+      <li>O robô do time confere o card e comenta no PR. Se o professor pedir mudança, edite o arquivo no <strong>seu fork</strong>, na mesma branch (<code>patch-1</code>): o PR se atualiza sozinho.</li>
     </ol>
 
     <h2 id="sync">Atualizar o seu fork antes de cada tarefa</h2>
@@ -51,15 +53,17 @@
     </ol>
 
     <h2 id="tarefa">Entregar uma tarefa da sprint</h2>
+    <p>A página <a href="tarefas.html#minha">Sprint › Minha tarefa</a> mostra o seu próximo passo com os botões certos. O caminho completo:</p>
     <ol class="passos">
-      <li>Na página <a href="tarefas.html">Sprint</a>, escolha uma tarefa <strong>Livre</strong> do seu squad e clique em <strong>Pegar esta tarefa</strong>.</li>
-      <li>Na Issue, comente <code>/eu-pego</code>. O robô do time responde e a tarefa fica com você (1 tarefa por vez; para devolver, comente <code>/largar</code>).</li>
-      <li>Leia a história, o critério de aceite e o arquivo da tarefa. Atualize o seu fork (guia acima).</li>
-      <li>Faça a alteração no seu fork, só nos arquivos do seu squad. No commit, escolha <strong>Create a new branch</strong> com um nome que diz o que é: <code>carrinho-pedido-minimo</code>.</li>
-      <li>Abra o pull request com <code>Closes #número-da-issue</code> e o diagrama de referência. O cartão vai para <strong>Em revisão</strong>.</li>
-      <li>Peça ao Tech Lead do squad que revise. Ajuste o que ele ou o professor pedirem, na mesma branch.</li>
-      <li>Depois do merge, a Issue fecha sozinha e o cartão vai para <strong>Pronto</strong>.</li>
+      <li>Na página <a href="tarefas.html">Sprint</a>, escolha uma tarefa <strong>Livre</strong> do seu squad e clique em <strong>Pegar esta tarefa</strong>. A Issue abre e o <code>/eu-pego</code> já fica copiado.</li>
+      <li>Na Issue, cole (<code>Ctrl+V</code>) na caixa de comentário e clique em <strong>Comment</strong>. O robô responde e a tarefa fica com você (1 tarefa por vez; para devolver, comente <code>/largar</code>).</li>
+      <li>Leia a história e o critério de aceite. Na resposta do robô (ou em <em>Minha tarefa</em>), clique em <strong>Editar</strong>: o arquivo da tarefa abre no GitHub. Se pedir, clique em <strong>Fork this repository</strong>.</li>
+      <li>Escreva o que o critério pede. Clique em <strong>Commit changes...</strong>, escreva o que fez (<code>Preenche a entrevista do cardápio</code>) e clique em <strong>Propose changes</strong>.</li>
+      <li>Clique em <strong>Create pull request</strong>, escreva <code>Closes #número-da-issue</code> no campo Issue e o diagrama de referência. O robô confere o PR e a tarefa vai para <strong>Em revisão</strong>.</li>
+      <li>Peça ao Tech Lead do squad que revise. Ajuste o que ele ou o professor pedirem, no seu fork, na mesma branch.</li>
+      <li>Depois do merge, a Issue fecha sozinha e a tarefa vai para <strong>Pronto</strong>.</li>
     </ol>
+    <p class="sub">O seu fork ficou velho (os colegas já fizeram merge de outras coisas)? Faça o <a href="#sync">Sync fork</a> antes de editar.</p>
 
     <h2 id="drawio">Entregar um diagrama do draw.io</h2>
     <ol class="passos">
