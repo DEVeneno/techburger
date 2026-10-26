@@ -163,13 +163,14 @@ async function iniciarHome() {
 
 // ---------- time
 async function iniciarTime() {
-  const time = await lerJSON('dados/time.json', []);
+  const [time, vagas] = await Promise.all([lerJSON('dados/time.json', []), lerJSON('squads.json', {})]);
   const alvo = document.getElementById('time');
   document.getElementById('total').textContent = time.length + (time.length === 1 ? ' dev' : ' devs');
   for (const squad of SQUADS.concat(['Sem squad'])) {
     const devs = time.filter((d) => d.squad === squad);
     if (squad === 'Sem squad' && !devs.length) continue;
-    alvo.appendChild(el('h2', 'Squad ' + squad + ' (' + devs.length + ')'));
+    alvo.appendChild(el('h2', 'Squad ' + squad + (vagas[squad] ? ' (' + devs.length + ' de ' + vagas[squad] + ')' : ' (' + devs.length + ')')));
+    if (vagas[squad] && devs.length > vagas[squad]) alvo.appendChild(el('p', 'Este squad passou do número de vagas: o professor vai acertar a divisão.', 'problemas'));
     const grade = el('div', null, 'grade');
     if (!devs.length) grade.appendChild(el('p', 'Ninguém ainda: abra o seu pull request!', 'vazio'));
     for (const d of devs) {
@@ -187,13 +188,28 @@ async function iniciarTime() {
 }
 
 // ---------- começar: gerador do card da Sprint 0
-function iniciarComecar() {
+async function iniciarComecar() {
   const form = document.getElementById('form-card');
   const previa = document.getElementById('previa-card');
   const problemas = document.getElementById('problemas-card');
   const acoes = document.getElementById('acoes-card');
   const campo = (id) => document.getElementById(id);
   campo('c-usuario').value = lerUsuario();
+  // vagas por squad (squads.json) x cards que já entraram: squad cheio fica bloqueado
+  const [vagas, time] = await Promise.all([lerJSON('squads.json', {}), lerJSON('dados/time.json', [])]);
+  function ocupadas(squad, u) {
+    return time.filter((d) => d.squad === squad && d.github.toLowerCase() !== u).length;
+  }
+  function marcarVagas() {
+    const u = limparUsuario(campo('c-usuario').value);
+    for (const op of campo('c-squad').options) {
+      if (!op.value || !vagas[op.value]) continue;
+      const n = ocupadas(op.value, u);
+      const cheio = n >= vagas[op.value];
+      op.textContent = op.value + (cheio ? ' (cheio)' : ' (' + (vagas[op.value] - n) + (vagas[op.value] - n === 1 ? ' vaga)' : ' vagas)'));
+      op.disabled = cheio && campo('c-squad').value !== op.value;
+    }
+  }
 
   function montar() {
     const nome = campo('c-nome').value.trim().split(/\s+/)[0] || '';
@@ -206,6 +222,7 @@ function iniciarComecar() {
     if (campo('c-nome').value.trim().split(/\s+/).length > 1) erros.push('Só o primeiro nome: o repositório é público (usei "' + nome + '").');
     if (!/^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$/.test(u)) erros.push('Escreva o seu usuário do GitHub (ex.: maria-silva), sem espaço.');
     if (!squad) erros.push('Escolha o seu squad (o professor diz qual é).');
+    else if (vagas[squad] && ocupadas(squad, u) >= vagas[squad]) erros.push('O Squad ' + squad + ' já está cheio. Confira com o professor qual é o seu squad.');
     if (!aprender) erros.push('Conte o que quer aprender no projeto.');
     if (!curiosidade) erros.push('Conte uma curiosidade sobre você.');
     if (/\d{3}\.?\d{3}\.?\d{3}-?\d{2}|\(?\d{2}\)?\s?9?\d{4}-?\d{4}/.test(aprender + ' ' + curiosidade)) erros.push('Parece que tem CPF ou telefone no texto. Tire: o repositório é público.');
@@ -218,6 +235,7 @@ function iniciarComecar() {
   }
 
   function desenhar() {
+    marcarVagas();
     const { u, texto, erros } = montar();
     previa.textContent = texto;
     problemas.replaceChildren();
