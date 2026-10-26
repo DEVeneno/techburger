@@ -104,7 +104,7 @@ function botoesArquivo(t) {
     if (arq.endsWith('.drawio')) {
       // o ponto de partida do squad abre direto no draw.io do navegador
       const bruto = 'https://raw.githubusercontent.com/aprendendodev/techburger/main/' + arq;
-      caixa.appendChild(link('Abrir no draw.io', 'https://app.diagrams.net/#U' + encodeURIComponent(bruto), 'botao pequeno'));
+      caixa.appendChild(link('Abrir no draw.io', 'https://app.diagrams.net/?lang=pt-br#U' + encodeURIComponent(bruto), 'botao pequeno'));
       caixa.appendChild(link('Enviar ' + arq.split('/').pop(), REPO + '/upload/main/' + arq.split('/').slice(0, -1).join('/'), 'botao pequeno secundario'));
     } else {
       caixa.appendChild(link('Editar ' + arq.split('/').pop(), REPO + '/edit/main/' + arq, 'botao pequeno'));
