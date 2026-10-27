@@ -278,7 +278,9 @@ async function iniciarComecar() {
     }
     guardarUsuario(u);
     const url = REPO + '/new/main/equipe?filename=' + encodeURIComponent(u + '.md') + '&value=' + encodeURIComponent(texto);
-    const abrir = link('Criar o meu card no GitHub', url, 'botao');
+    // fork antes: o botão "Fork this repository" do editor falha calado em conta sem e-mail verificado
+    acoes.appendChild(link('1. Criar o meu fork', REPO + '/fork', 'botao secundario'));
+    const abrir = link('2. Criar o meu card no GitHub', url, 'botao');
     abrir.addEventListener('click', () => {
       copiar(texto);
       avisar('Texto do card copiado também. Se a caixa do GitHub aparecer vazia, cole (Ctrl+V).');
