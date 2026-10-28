@@ -3,7 +3,8 @@ name: Conferir pull request
 # Quando um pull request é aberto, o robô do time:
 #   1. liga o PR à tarefa se o dev esqueceu ("Closes #N" ou, no card, "Parte de #1");
 #   2. avisa se o PR mexe em arquivos de fora da tarefa;
-#   3. confere o card (squad e usuário) na Sprint 0.
+#   3. confere se os arquivos .json do PR são válidos;
+#   4. confere o card (squad e usuário) na Sprint 0.
 # Roda no contexto do repositório da empresa e só lê o PR pela API: nunca executa o código dele.
 on:
   pull_request_target:
@@ -75,6 +76,17 @@ jobs:
             const fora = esperados.length ? arquivos.filter((f) => !esperados.some((e) => e.toLowerCase() === f.toLowerCase()) && !pastas.some((p) => f.startsWith(p))) : [];
             if (fora.length) {
               avisos.push(`Este PR mexe em arquivo(s) de fora da tarefa: ${fora.map((f) => '`' + f + '`').join(', ')}. Se foi sem querer, apague a mudança desses arquivos. Lembre: **uma tarefa = um PR**.`);
+            }
+
+            // 2b. JSON válido? (dados do app, Sprint 3 em diante)
+            for (const f of arquivos.filter((a) => a.toLowerCase().endsWith('.json'))) {
+              try {
+                const r = await github.rest.repos.getContent({ owner, repo, path: f, ref: pr.head.sha });
+                JSON.parse(Buffer.from(r.data.content, 'base64').toString('utf8'));
+              } catch (e) {
+                if (e.status === 404) continue;
+                avisos.push(`O arquivo \`${f}\` não é um JSON válido (${e.message}). Procure vírgula sobrando antes de \`]\` ou \`}\`, aspas simples ou chave sem fechar. Dica: cole o arquivo em https://jsonlint.com e corrija no seu fork, na mesma branch.`);
+              }
             }
 
             // 3. o card da Sprint 0

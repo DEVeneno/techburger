@@ -1,0 +1,3 @@
+{
+  "_comoPreencher": "Uma lista para cada classe azul do classes.drawio do Squad Pagamento (ex.: \"pagamentos\"). Cada atributo vira um campo com o mesmo nome; o desconto e o total (derivados) ficam de fora. Pelo menos 3 exemplos: PIX confirmado, PIX vencido e cartão. Apague esta linha quando terminar."
+}
